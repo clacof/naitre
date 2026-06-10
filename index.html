@@ -185,6 +185,49 @@
   }
   .service p{font-size:.92rem;color:var(--muted)}
 
+  /* ---------- Clickable cards + detail modal ---------- */
+  .service,.ai-card{cursor:pointer}
+  .more{
+    display:inline-block;margin-top:18px;
+    font-family:var(--serif);font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:500;color:var(--accent);
+    opacity:.7;transition:opacity .25s,transform .25s;
+  }
+  .service:hover .more,.ai-card:hover .more{opacity:1;transform:translateX(4px)}
+  .svc-modal{
+    position:fixed;inset:0;z-index:400;display:none;
+    align-items:center;justify-content:center;padding:24px;
+  }
+  .svc-modal.open{display:flex}
+  .svc-backdrop{
+    position:absolute;inset:0;background:rgba(20,20,19,.55);
+    backdrop-filter:blur(6px);
+  }
+  .svc-box{
+    position:relative;background:var(--bg);border:1px solid var(--line);
+    border-radius:18px;max-width:620px;width:100%;max-height:85vh;
+    overflow-y:auto;padding:48px;
+    box-shadow:0 32px 80px rgba(20,20,19,.3);
+  }
+  .svc-box h3{
+    font-family:var(--serif);font-weight:500;font-size:1.7rem;
+    margin-bottom:18px;line-height:1.2;padding-right:32px;
+  }
+  .svc-body p{color:var(--muted);font-size:.97rem;margin-bottom:8px}
+  .svc-body ul{list-style:none;margin:20px 0 8px;border-top:1px solid var(--line)}
+  .svc-body li{
+    padding:13px 0;border-bottom:1px solid var(--line);
+    font-size:.92rem;display:flex;gap:14px;align-items:baseline;
+  }
+  .svc-body li::before{content:"—";color:var(--accent);flex-shrink:0}
+  .svc-box .btn{margin-top:28px}
+  .svc-close{
+    position:absolute;top:20px;right:20px;background:none;border:none;
+    cursor:pointer;font-size:1.2rem;color:var(--muted);line-height:1;padding:6px;
+  }
+  .svc-close:hover{color:var(--ink)}
+  @media(max-width:560px){.svc-box{padding:32px 24px}}
+
   /* ---------- About ---------- */
   .about-grid{
     display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;
@@ -530,6 +573,18 @@
   </div>
 </section>
 
+<!-- Service detail modal -->
+<div class="svc-modal" id="svcModal" role="dialog" aria-modal="true">
+  <div class="svc-backdrop" id="svcBackdrop"></div>
+  <div class="svc-box">
+    <button class="svc-close" id="svcClose" aria-label="Cerrar">✕</button>
+    <p class="section-label" id="svcLabel"></p>
+    <h3 id="svcTitle"></h3>
+    <div class="svc-body" id="svcBody"></div>
+    <a href="#contacto" class="btn btn-primary" id="svcCta">Empezar un proyecto</a>
+  </div>
+</div>
+
 <!-- Chat widget -->
 <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat">
   <div class="chat-head">
@@ -612,7 +667,21 @@ const i18n = {
     chat_status:"en línea",
     chat_hello:"¡Hola! Soy n., el asistente de naitre. ¿Qué quieres construir? Puedo contarte sobre nuestros servicios de IA, webs, apps móviles, IoT y más.",
     chat_error:"Ups, no pude responder ahora mismo. Inténtalo de nuevo o escríbenos a hola@naitre.dev.",
-    chat_ph:"Escribe tu mensaje…"
+    chat_ph:"Escribe tu mensaje…",
+    more_label:"Ver más +",
+    modal_cta:"Empezar un proyecto",
+    s1_long:"<p>Construimos desde landing pages hasta plataformas web complejas, con rendimiento, SEO y accesibilidad como base, no como extras.</p><ul><li>Sitios corporativos y e-commerce a medida</li><li>Aplicaciones web: SaaS, paneles, portales de cliente</li><li>Rendimiento, SEO técnico y accesibilidad</li><li>Stack moderno: React, Next.js, Node</li></ul>",
+    s2_long:"<p>Apps nativas y multiplataforma con foco en la experiencia. Te acompañamos desde la idea hasta la publicación en las stores y su mantenimiento.</p><ul><li>iOS y Android nativos (Swift, Kotlin)</li><li>Multiplataforma con Flutter o React Native</li><li>Push, pagos, geolocalización, modo offline</li><li>Publicación y mantenimiento en App Store y Google Play</li></ul>",
+    s3_long:"<p>Conectamos dispositivos físicos con plataformas digitales para capturar datos del mundo real y actuar sobre él en tiempo real.</p><ul><li>Firmware y prototipado electrónico</li><li>Conectividad: WiFi, BLE, LoRa, MQTT</li><li>Plataformas de telemetría y dashboards en vivo</li><li>Alertas y mantenimiento predictivo</li></ul>",
+    s4_long:"<p>Sistemas diseñados alrededor de tus procesos: gestión interna, integraciones y automatización de operaciones que hoy viven en hojas de cálculo.</p><ul><li>Sistemas de gestión internos (mini-ERP, CRM)</li><li>Integraciones entre herramientas y APIs</li><li>Modernización de sistemas legados</li><li>Reporting y paneles de control</li></ul>",
+    s5_long:"<p>Diseño centrado en usuarios y datos: investigamos, prototipamos y validamos antes de escribir una sola línea de código.</p><ul><li>Research y tests con usuarios</li><li>Wireframes y prototipos interactivos</li><li>Sistemas de diseño y guías de estilo</li><li>Auditorías de usabilidad de productos existentes</li></ul>",
+    s6_long:"<p>Infraestructura que escala contigo: automatizamos despliegues y operamos tu plataforma con observabilidad completa.</p><ul><li>Arquitectura en AWS, GCP, Azure o Vercel</li><li>CI/CD y despliegues automatizados</li><li>Contenedores y Kubernetes</li><li>Monitorización, logging y alertas</li></ul>",
+    ai1_long:"<p>Agentes autónomos que razonan, usan herramientas y completan procesos de principio a fin, con supervisión humana donde importa.</p><ul><li>Atención al cliente de primer y segundo nivel</li><li>Operaciones repetitivas de back-office</li><li>Investigación, síntesis y redacción</li><li>Integrados con tus sistemas y datos</li></ul>",
+    ai2_long:"<p>Auditamos tus flujos de trabajo y los convertimos en workflows automáticos que ahorran horas cada semana y eliminan errores manuales.</p><ul><li>Orquestación entre CRM, email, ERP y más</li><li>Extracción y clasificación de documentos</li><li>Aprobaciones, recordatorios y notificaciones</li><li>Con plataformas (n8n, Make) o 100% a medida</li></ul>",
+    ai3_long:"<p>Asistentes entrenados con tu conocimiento, que hablan con el tono de tu marca y derivan a una persona cuando hace falta.</p><ul><li>Web, WhatsApp, Instagram, Slack</li><li>RAG sobre tus documentos y FAQs</li><li>Captura y calificación de leads</li><li>Analítica de conversaciones</li></ul>",
+    ai4_long:"<p>Integramos modelos de lenguaje (OpenAI, Anthropic, open source) en tus productos, con evaluación de calidad y control de costes.</p><ul><li>Búsqueda semántica y RAG</li><li>Generación y resumen de contenido</li><li>Copilotos internos para tu equipo</li><li>Fine-tuning y evaluación continua</li></ul>",
+    ai5_long:"<p>Modelos que convierten tu histórico de datos en decisiones: prever, segmentar y detectar antes de que ocurra.</p><ul><li>Forecasting de demanda y ventas</li><li>Scoring y segmentación de clientes</li><li>Detección de fraude y anomalías</li><li>Pipelines de datos y dashboards</li></ul>",
+    ai6_long:"<p>Una hoja de ruta pragmática: identificamos los casos de uso con mayor retorno y los validamos con pilotos rápidos, sin humo.</p><ul><li>Auditoría de procesos y datos</li><li>Priorización por impacto y esfuerzo</li><li>Pilotos funcionando en semanas</li><li>Formación de tu equipo</li></ul>"
   },
   en: {
     nav_services:"Services", nav_about:"About", nav_contact:"Contact", nav_ai:"AI",
@@ -658,7 +727,21 @@ const i18n = {
     chat_status:"online",
     chat_hello:"Hi! I'm n., naitre's assistant. What do you want to build? I can tell you about our AI services, websites, mobile apps, IoT and more.",
     chat_error:"Oops, I couldn't reply right now. Try again or email us at hola@naitre.dev.",
-    chat_ph:"Type your message…"
+    chat_ph:"Type your message…",
+    more_label:"Learn more +",
+    modal_cta:"Start a project",
+    s1_long:"<p>From landing pages to complex web platforms, with performance, SEO and accessibility as the foundation — not afterthoughts.</p><ul><li>Custom corporate sites and e-commerce</li><li>Web apps: SaaS, dashboards, client portals</li><li>Performance, technical SEO and accessibility</li><li>Modern stack: React, Next.js, Node</li></ul>",
+    s2_long:"<p>Native and cross-platform apps focused on experience. We go with you from idea to store release and beyond.</p><ul><li>Native iOS and Android (Swift, Kotlin)</li><li>Cross-platform with Flutter or React Native</li><li>Push, payments, geolocation, offline mode</li><li>App Store & Google Play release and maintenance</li></ul>",
+    s3_long:"<p>We connect physical devices with digital platforms to capture real-world data and act on it in real time.</p><ul><li>Firmware and electronics prototyping</li><li>Connectivity: WiFi, BLE, LoRa, MQTT</li><li>Telemetry platforms and live dashboards</li><li>Alerts and predictive maintenance</li></ul>",
+    s4_long:"<p>Systems designed around your processes: internal management, integrations and automation of operations that live in spreadsheets today.</p><ul><li>Internal management systems (mini-ERP, CRM)</li><li>Integrations between tools and APIs</li><li>Legacy system modernization</li><li>Reporting and control panels</li></ul>",
+    s5_long:"<p>User- and data-centered design: we research, prototype and validate before writing a single line of code.</p><ul><li>Research and user testing</li><li>Wireframes and interactive prototypes</li><li>Design systems and style guides</li><li>Usability audits of existing products</li></ul>",
+    s6_long:"<p>Infrastructure that scales with you: automated deployments and full observability for your platform.</p><ul><li>Architecture on AWS, GCP, Azure or Vercel</li><li>CI/CD and automated deployments</li><li>Containers and Kubernetes</li><li>Monitoring, logging and alerting</li></ul>",
+    ai1_long:"<p>Autonomous agents that reason, use tools and complete processes end to end, with human oversight where it matters.</p><ul><li>Tier 1–2 customer support</li><li>Repetitive back-office operations</li><li>Research, synthesis and writing</li><li>Integrated with your systems and data</li></ul>",
+    ai2_long:"<p>We audit your workflows and turn them into automated pipelines that save hours every week and eliminate manual errors.</p><ul><li>Orchestration across CRM, email, ERP and more</li><li>Document extraction and classification</li><li>Approvals, reminders and notifications</li><li>With platforms (n8n, Make) or fully custom</li></ul>",
+    ai3_long:"<p>Assistants trained on your knowledge, speaking in your brand's voice and handing off to a human when needed.</p><ul><li>Web, WhatsApp, Instagram, Slack</li><li>RAG over your docs and FAQs</li><li>Lead capture and qualification</li><li>Conversation analytics</li></ul>",
+    ai4_long:"<p>We integrate language models (OpenAI, Anthropic, open source) into your products, with quality evaluation and cost control.</p><ul><li>Semantic search and RAG</li><li>Content generation and summarization</li><li>Internal copilots for your team</li><li>Fine-tuning and continuous evaluation</li></ul>",
+    ai5_long:"<p>Models that turn your historical data into decisions: forecast, segment and detect before it happens.</p><ul><li>Demand and sales forecasting</li><li>Customer scoring and segmentation</li><li>Fraud and anomaly detection</li><li>Data pipelines and dashboards</li></ul>",
+    ai6_long:"<p>A pragmatic roadmap: we identify the use cases with the highest return and validate them with fast pilots — no hype.</p><ul><li>Process and data audit</li><li>Prioritization by impact and effort</li><li>Pilots running in weeks</li><li>Team training</li></ul>"
   }
 };
 
@@ -678,6 +761,7 @@ function setLang(l){
   });
   const ci = document.getElementById('chatInput');
   if(ci) ci.placeholder = i18n[l].chat_ph;
+  if(typeof svcCurrent === 'string' && svcCurrent) fillSvc(svcCurrent);
 }
 
 function sendMail(e){
@@ -690,6 +774,41 @@ function sendMail(e){
   window.location.href = 'mailto:hola@naitre.dev?subject='+subject+'&body='+body;
   return false;
 }
+
+/* ---------- service detail modal ---------- */
+const svcModal = document.getElementById('svcModal');
+let svcCurrent = null;
+function fillSvc(id){
+  document.getElementById('svcLabel').textContent = i18n[lang][id.startsWith('ai') ? 'ai_label' : 'serv_label'];
+  document.getElementById('svcTitle').textContent = i18n[lang][id+'_t'];
+  document.getElementById('svcBody').innerHTML = i18n[lang][id+'_long'] || '';
+  document.getElementById('svcCta').textContent = i18n[lang].modal_cta;
+}
+function openSvc(id){
+  svcCurrent = id; fillSvc(id);
+  svcModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSvc(){
+  svcCurrent = null;
+  svcModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.service, .ai-card').forEach(card=>{
+  const h = card.querySelector('h3[data-i18n]');
+  if(!h) return;
+  const id = h.getAttribute('data-i18n').replace(/_t$/,'');
+  const m = document.createElement('span');
+  m.className = 'more';
+  m.setAttribute('data-i18n','more_label');
+  m.textContent = i18n[lang].more_label;
+  card.appendChild(m);
+  card.addEventListener('click', ()=>openSvc(id));
+});
+document.getElementById('svcBackdrop').addEventListener('click', closeSvc);
+document.getElementById('svcClose').addEventListener('click', closeSvc);
+document.getElementById('svcCta').addEventListener('click', closeSvc);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSvc(); });
 
 /* ---------- chat widget ---------- */
 const chatPanel = document.getElementById('chatPanel');
