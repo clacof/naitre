@@ -29,9 +29,10 @@
   :root{
     --bg:#f9f7f1;
     --ink:#191713;
-    --muted:#7b7669;
+    --muted:#6b665a;
     --line:#e6e2d5;
     --accent:#c96342;
+    --accent-ink:#a84e31;
     --accent-blue:#5d7e9c;
     --accent-green:#6f7d54;
     --display:'Fraunces',Georgia,serif;
@@ -39,7 +40,7 @@
     --label:'Poppins',Arial,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:96px}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -49,6 +50,29 @@
     -webkit-font-smoothing:antialiased;
   }
   ::selection{background:var(--accent);color:#fff}
+
+  /* ---------- Accesibilidad base ---------- */
+  .skip-link{
+    position:fixed;top:-100px;left:16px;z-index:500;
+    background:var(--ink);color:var(--bg);font-family:var(--label);
+    font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:12px 22px;border-radius:999px;text-decoration:none;transition:top .2s;
+  }
+  .skip-link:focus{top:16px}
+  :focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px;border-radius:2px}
+  .ai-section :focus-visible{outline-color:var(--accent)}
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms!important;animation-iteration-count:1!important;
+      transition-duration:.01ms!important;
+    }
+    .reveal{opacity:1;transform:none}
+  }
 
   .container{max-width:1100px;margin:0 auto;padding:0 32px}
 
@@ -84,11 +108,12 @@
   .lang-switch button{
     border:none;background:transparent;cursor:pointer;
     font-family:var(--label);font-size:.75rem;font-weight:500;
-    letter-spacing:.08em;padding:4px 12px;border-radius:999px;
+    letter-spacing:.08em;padding:7px 14px;border-radius:999px;
     color:var(--muted);transition:all .25s;
   }
+  .lang-switch button:hover{color:var(--ink)}
   .lang-switch button.active{background:var(--ink);color:var(--bg)}
-  .menu-btn{display:none;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--ink)}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:10px;margin:-10px}
 
   /* ---------- Hero ---------- */
   header{
@@ -98,7 +123,7 @@
   .hero-content{position:relative;z-index:2}
   .hero-eyebrow{
     font-family:var(--label);font-size:.78rem;letter-spacing:.28em;
-    text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:28px;
+    text-transform:uppercase;color:var(--accent-ink);font-weight:500;margin-bottom:28px;
   }
   .hero-mark-sm{display:none}
   h1{
@@ -115,8 +140,11 @@
   .btn{
     display:inline-block;text-decoration:none;font-size:.8rem;
     letter-spacing:.12em;text-transform:uppercase;font-weight:500;
-    font-family:var(--label);padding:16px 36px;border-radius:999px;transition:all .3s;
+    font-family:var(--label);padding:16px 36px;border-radius:999px;
+    transition:background .3s,border-color .3s,color .3s,transform .3s;
   }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
   .btn-primary{background:var(--ink);color:var(--bg);border:1px solid var(--ink)}
   .btn-primary:hover{background:var(--accent);border-color:var(--accent)}
   .btn-ghost{border:1px solid var(--line);color:var(--ink)}
@@ -145,7 +173,7 @@
   .label-row .section-label{margin-bottom:0}
   .section-label{
     font-family:var(--label);font-size:.78rem;letter-spacing:.28em;
-    text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:20px;
+    text-transform:uppercase;color:var(--accent-ink);font-weight:500;margin-bottom:20px;
   }
   .fig{
     font-family:var(--label);font-size:.66rem;letter-spacing:.22em;
@@ -212,7 +240,7 @@
   .service:hover{background:#fff}
   .service-num{
     font-family:var(--display);font-style:italic;font-size:1rem;
-    color:var(--accent);display:block;margin-bottom:20px;
+    color:var(--accent-ink);display:block;margin-bottom:20px;
   }
   .service h3{
     font-family:var(--display);font-weight:450;font-size:1.5rem;
@@ -226,10 +254,12 @@
   .more{
     display:inline-block;margin-top:18px;
     font-family:var(--label);font-size:.72rem;letter-spacing:.14em;
-    text-transform:uppercase;font-weight:500;color:var(--accent);
-    opacity:.7;transition:opacity .25s,transform .25s;
+    text-transform:uppercase;font-weight:500;color:var(--accent-ink);
+    transition:transform .25s;
   }
-  .service:hover .more,.ai-card:hover .more{opacity:1;transform:translateX(4px)}
+  .ai-card .more{color:var(--accent)}
+  .service:hover .more,.ai-card:hover .more,
+  .service:focus-visible .more,.ai-card:focus-visible .more{transform:translateX(4px)}
   .svc-modal{
     position:fixed;inset:0;z-index:400;display:none;
     align-items:center;justify-content:center;padding:24px;
@@ -258,8 +288,8 @@
   .svc-body li::before{content:"—";color:var(--accent);flex-shrink:0}
   .svc-box .btn{margin-top:28px}
   .svc-close{
-    position:absolute;top:20px;right:20px;background:none;border:none;
-    cursor:pointer;font-size:1.2rem;color:var(--muted);line-height:1;padding:6px;
+    position:absolute;top:14px;right:14px;background:none;border:none;
+    cursor:pointer;color:var(--muted);line-height:1;padding:14px;
   }
   .svc-close:hover{color:var(--ink)}
   @media(max-width:560px){.svc-box{padding:32px 24px}}
@@ -276,7 +306,7 @@
     display:flex;gap:24px;align-items:baseline;
   }
   .pillars .k{
-    font-family:var(--display);font-style:italic;color:var(--accent);
+    font-family:var(--display);font-style:italic;color:var(--accent-ink);
     min-width:36px;font-size:1.05rem;
   }
   .pillars .t strong{display:block;font-weight:500;font-size:.95rem;margin-bottom:2px}
@@ -297,10 +327,13 @@
     text-transform:uppercase;color:var(--muted);margin-bottom:6px;
   }
   .field input,.field textarea{
-    width:100%;border:none;background:transparent;outline:none;
-    font-family:var(--body);font-size:1rem;font-weight:300;color:var(--ink);
+    width:100%;border:none;background:transparent;
+    font-family:var(--body);font-size:1rem;font-weight:400;color:var(--ink);
     resize:vertical;
   }
+  .field textarea{min-height:96px}
+  .field:focus-within{border-bottom-color:var(--accent-ink)}
+  .field input:focus-visible,.field textarea:focus-visible{outline:none}
   form .btn{margin-top:36px;align-self:flex-start;cursor:pointer}
   .form-note{font-size:.8rem;color:var(--muted);margin-top:16px}
 
@@ -356,7 +389,7 @@
   .chat-head .s{font-size:.72rem;color:#a9a499}
   .chat-head .close{
     margin-left:auto;background:none;border:none;color:#a9a499;cursor:pointer;
-    font-size:1.1rem;line-height:1;padding:4px;
+    line-height:1;padding:12px;margin-right:-8px;
   }
   .chat-head .close:hover{color:var(--bg)}
   .chat-body{
@@ -384,7 +417,7 @@
     padding:11px 18px;font-family:var(--body);font-size:.9rem;
     background:#fff;color:var(--ink);outline:none;
   }
-  .chat-input input:focus{border-color:var(--muted)}
+  .chat-input input:focus{border-color:var(--accent-ink)}
   .chat-input button{
     border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;
     background:var(--accent);color:var(--bg);flex-shrink:0;
@@ -420,6 +453,8 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="mark" viewBox="0 0 100 100">
     <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="0.7 3.05"/>
@@ -446,7 +481,7 @@
   </symbol>
 </svg>
 
-<nav>
+<nav aria-label="Principal">
   <div class="nav-inner">
     <a href="#" class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#mark"/></svg>naitre<span>.</span></a>
     <ul class="nav-links" id="navLinks">
@@ -456,14 +491,16 @@
       <li><a href="#contacto" data-i18n="nav_contact">Contacto</a></li>
       <li>
         <div class="lang-switch">
-          <button id="btn-es" class="active" aria-pressed="true" onclick="setLang('es')">ES</button>
-          <button id="btn-en" aria-pressed="false" onclick="setLang('en')">EN</button>
+          <button id="btn-es" class="active" aria-pressed="true" lang="es" aria-label="Español" onclick="setLang('es')">ES</button>
+          <button id="btn-en" aria-pressed="false" lang="en" aria-label="English" onclick="setLang('en')">EN</button>
         </div>
       </li>
     </ul>
-    <button class="menu-btn" id="menuBtn" aria-label="Menú"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menú" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   </div>
 </nav>
+
+<main id="main">
 
 <header>
   <svg class="hero-mark" aria-hidden="true"><use href="#mark"/></svg>
@@ -606,15 +643,15 @@
       <form class="reveal" onsubmit="return sendMail(event)">
         <div class="field">
           <label for="f-name" data-i18n="f_name">Nombre</label>
-          <input id="f-name" type="text" required>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
         </div>
         <div class="field">
           <label for="f-email" data-i18n="f_email">Email</label>
-          <input id="f-email" type="email" required>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
         </div>
         <div class="field">
           <label for="f-msg" data-i18n="f_msg">Cuéntanos tu proyecto</label>
-          <textarea id="f-msg" rows="4" required></textarea>
+          <textarea id="f-msg" name="message" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary" data-i18n="f_send">Enviar</button>
         <p class="form-note" data-i18n="f_note">El formulario abrirá tu cliente de correo con el mensaje listo para enviar.</p>
@@ -623,12 +660,14 @@
   </div>
 </section>
 
+</main>
+
 <!-- Service detail modal -->
-<div class="svc-modal" id="svcModal" role="dialog" aria-modal="true">
+<div class="svc-modal" id="svcModal" role="dialog" aria-modal="true" aria-labelledby="svcTitle">
   <div class="svc-backdrop" id="svcBackdrop"></div>
   <div class="svc-box">
     <button class="svc-close" id="svcClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-    <p class="section-label" id="svcLabel"></p>
+    <p class="section-label" id="svcLabel" aria-hidden="true"></p>
     <h3 id="svcTitle"></h3>
     <div class="svc-body" id="svcBody"></div>
     <a href="#contacto" class="btn btn-primary" id="svcCta">Empezar un proyecto</a>
@@ -636,7 +675,7 @@
 </div>
 
 <!-- Chat widget -->
-<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat">
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="asistente de naitre">
   <div class="chat-head">
     <svg aria-hidden="true"><use href="#mark"/></svg>
     <div>
@@ -645,13 +684,13 @@
     </div>
     <button class="close" id="chatClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
-  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-body" id="chatBody" role="log" aria-live="polite"></div>
   <div class="chat-input">
-    <input id="chatInput" type="text" autocomplete="off" placeholder="Escribe tu mensaje…">
+    <input id="chatInput" type="text" autocomplete="off" placeholder="Escribe tu mensaje…" aria-label="Escribe tu mensaje">
     <button id="chatSend" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 </div>
-<button class="chat-fab" id="chatFab" aria-label="Abrir chat">
+<button class="chat-fab" id="chatFab" aria-label="Abrir chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chatPanel">
   <svg class="icon-chat" viewBox="0 0 32 32" aria-hidden="true">
     <path d="M10 5.5 h12 a6 6 0 0 1 6 6 v7 a6 6 0 0 1 -6 6 h-7.5 l-5.5 4.5 v-4.5 h-0.5 a6 6 0 0 1 -6 -6 v-7 a6 6 0 0 1 6 -6 z"
           fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
@@ -678,6 +717,8 @@ const i18n = {
     doc_title:"naitre — Estudio de desarrollo de software",
     doc_desc:"naitre — estudio de desarrollo de software. IA, webs, apps móviles, IoT y software a medida. Donde las ideas nacen.",
     nav_services:"Servicios", nav_about:"Nosotros", nav_contact:"Contacto", nav_ai:"IA",
+    skip:"Saltar al contenido", menu_label:"Menú", close_label:"Cerrar",
+    nav_aria:"Principal", chat_open:"Abrir chat", chat_send:"Enviar",
     hero_eyebrow:"naître · nacer · estudio de software",
     hero_title:'Donde las ideas <em>nacen</em> y se convierten en software',
     hero_sub:"Diseñamos y desarrollamos productos digitales de principio a fin: soluciones con IA, automatizaciones, webs, aplicaciones móviles, IoT y software a medida.",
@@ -740,6 +781,8 @@ const i18n = {
     doc_title:"naitre — Software development studio",
     doc_desc:"naitre — software development studio. AI, websites, mobile apps, IoT and custom software. Where ideas are born.",
     nav_services:"Services", nav_about:"About", nav_contact:"Contact", nav_ai:"AI",
+    skip:"Skip to content", menu_label:"Menu", close_label:"Close",
+    nav_aria:"Main", chat_open:"Open chat", chat_send:"Send",
     hero_eyebrow:"naître · to be born · software studio",
     hero_title:'Where ideas are <em>born</em> and become software',
     hero_sub:"We design and build digital products end to end: AI solutions, automations, websites, mobile apps, IoT and custom software.",
@@ -819,7 +862,15 @@ function setLang(l){
     if(i18n[l][k]) el.innerHTML = i18n[l][k];
   });
   const ci = document.getElementById('chatInput');
-  if(ci) ci.placeholder = i18n[l].chat_ph;
+  if(ci){ ci.placeholder = i18n[l].chat_ph; ci.setAttribute('aria-label', i18n[l].chat_ph); }
+  const t = i18n[l];
+  document.querySelector('nav').setAttribute('aria-label', t.nav_aria);
+  document.getElementById('menuBtn').setAttribute('aria-label', t.menu_label);
+  document.getElementById('svcClose').setAttribute('aria-label', t.close_label);
+  document.getElementById('chatClose').setAttribute('aria-label', t.close_label);
+  document.getElementById('chatSend').setAttribute('aria-label', t.chat_send);
+  document.getElementById('chatFab').setAttribute('aria-label', t.chat_open);
+  document.getElementById('chatPanel').setAttribute('aria-label', t.chat_title);
   if(typeof svcCurrent === 'string' && svcCurrent) fillSvc(svcCurrent);
 }
 
@@ -844,11 +895,14 @@ function fillSvc(id){
   document.getElementById('svcCta').textContent = i18n[lang].modal_cta;
 }
 let svcReturnFocus = null;
+const inertTargets = ()=>['nav','main','footer','#chatFab','#chatPanel']
+  .map(s=>document.querySelector(s)).filter(Boolean);
 function openSvc(id){
   svcCurrent = id; fillSvc(id);
   svcReturnFocus = document.activeElement;
   svcModal.classList.add('open');
   document.body.style.overflow = 'hidden';
+  inertTargets().forEach(el=>{ el.inert = true; });
   document.getElementById('svcClose').focus();
 }
 function closeSvc(){
@@ -856,6 +910,7 @@ function closeSvc(){
   svcCurrent = null;
   svcModal.classList.remove('open');
   document.body.style.overflow = '';
+  inertTargets().forEach(el=>{ el.inert = false; });
   if(svcReturnFocus && svcReturnFocus.focus){ svcReturnFocus.focus(); }
   svcReturnFocus = null;
 }
@@ -873,10 +928,15 @@ document.querySelectorAll('.service, .ai-card').forEach(card=>{
   const m = document.createElement('span');
   m.className = 'more';
   m.setAttribute('data-i18n','more_label');
+  m.setAttribute('aria-hidden','true');
   m.textContent = i18n[lang].more_label;
   card.appendChild(m);
+  h.id = id + '-title';
+  const d = card.querySelector('p[data-i18n]');
+  if(d){ d.id = id + '-desc'; card.setAttribute('aria-describedby', d.id); }
   card.setAttribute('role','button');
   card.setAttribute('tabindex','0');
+  card.setAttribute('aria-labelledby', h.id);
   card.setAttribute('aria-haspopup','dialog');
   card.addEventListener('click', ()=>openSvc(id));
   card.addEventListener('keydown', e=>{
@@ -886,7 +946,12 @@ document.querySelectorAll('.service, .ai-card').forEach(card=>{
 document.getElementById('svcBackdrop').addEventListener('click', closeSvc);
 document.getElementById('svcClose').addEventListener('click', closeSvc);
 document.getElementById('svcCta').addEventListener('click', closeSvc);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSvc(); });
+document.addEventListener('keydown', e=>{
+  if(e.key !== 'Escape') return;
+  if(svcCurrent){ closeSvc(); return; }
+  if(chatPanel.classList.contains('open')){ toggleChat(false); document.getElementById('chatFab').focus(); return; }
+  if(navLinks.classList.contains('open')){ closeMenu(); menuBtn.focus(); }
+});
 
 /* ---------- chat widget ---------- */
 const chatPanel = document.getElementById('chatPanel');
@@ -907,6 +972,7 @@ function addMsg(role, text){
 function addTyping(){
   const el = document.createElement('div');
   el.className = 'msg bot typing';
+  el.setAttribute('aria-hidden','true');
   el.innerHTML = '<span></span><span></span><span></span>';
   chatBody.appendChild(el);
   chatBody.scrollTop = chatBody.scrollHeight;
@@ -915,7 +981,9 @@ function addTyping(){
 
 function toggleChat(open){
   chatPanel.classList.toggle('open', open);
-  document.getElementById('chatFab').classList.toggle('open', open);
+  const fab = document.getElementById('chatFab');
+  fab.classList.toggle('open', open);
+  fab.setAttribute('aria-expanded', String(open));
   if(open && !chatOpened){
     chatOpened = true;
     addMsg('assistant', i18n[lang].chat_hello);
@@ -958,8 +1026,15 @@ chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter') sendChat(); });
 /* mobile menu */
 const menuBtn = document.getElementById('menuBtn');
 const navLinks = document.getElementById('navLinks');
-menuBtn.addEventListener('click', ()=> navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+function closeMenu(){
+  navLinks.classList.remove('open');
+  menuBtn.setAttribute('aria-expanded','false');
+}
+menuBtn.addEventListener('click', ()=>{
+  const open = navLinks.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', String(open));
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
 
 /* reveal on scroll */
 const obs = new IntersectionObserver(entries=>{
