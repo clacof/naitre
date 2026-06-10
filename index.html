@@ -234,6 +234,76 @@
   footer p{font-size:.8rem;color:var(--muted)}
   footer .logo{font-size:1.3rem}
 
+  /* ---------- Chat widget ---------- */
+  .chat-fab{
+    position:fixed;right:28px;bottom:28px;z-index:300;
+    width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--ink);color:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 28px rgba(20,20,19,.25);
+    transition:transform .25s,background .25s;
+  }
+  .chat-fab:hover{transform:scale(1.06);background:#262522}
+  .chat-fab svg{width:30px;height:30px}
+  .chat-panel{
+    position:fixed;right:28px;bottom:104px;z-index:300;
+    width:min(380px,calc(100vw - 40px));height:min(540px,calc(100vh - 140px));
+    background:var(--bg);border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 24px 64px rgba(20,20,19,.22);
+    display:none;flex-direction:column;overflow:hidden;
+  }
+  .chat-panel.open{display:flex}
+  .chat-head{
+    background:var(--ink);color:var(--bg);
+    padding:16px 20px;display:flex;align-items:center;gap:12px;
+  }
+  .chat-head svg{width:30px;height:30px;color:var(--bg);flex-shrink:0}
+  .chat-head .t{font-family:var(--serif);font-weight:500;font-size:.95rem;line-height:1.3}
+  .chat-head .s{font-size:.72rem;color:#b0aea5;display:flex;align-items:center;gap:6px}
+  .chat-head .s::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent-green)}
+  .chat-head .close{
+    margin-left:auto;background:none;border:none;color:#b0aea5;cursor:pointer;
+    font-size:1.1rem;line-height:1;padding:4px;
+  }
+  .chat-head .close:hover{color:var(--bg)}
+  .chat-body{
+    flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;
+  }
+  .msg{
+    max-width:85%;padding:11px 15px;border-radius:14px;
+    font-size:.9rem;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;
+  }
+  .msg.bot{background:var(--light,#e8e6dc);background:#efede4;color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
+  .msg.user{background:var(--ink);color:var(--bg);border-bottom-right-radius:4px;align-self:flex-end}
+  .msg.typing span{
+    display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--muted);margin-right:4px;
+    animation:blink 1.2s infinite;
+  }
+  .msg.typing span:nth-child(2){animation-delay:.2s}
+  .msg.typing span:nth-child(3){animation-delay:.4s;margin-right:0}
+  @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+  .chat-input{
+    display:flex;gap:10px;padding:14px;border-top:1px solid var(--line);background:var(--bg);
+  }
+  .chat-input input{
+    flex:1;border:1px solid var(--line);border-radius:999px;
+    padding:11px 18px;font-family:var(--sans);font-size:.9rem;
+    background:#fff;color:var(--ink);outline:none;
+  }
+  .chat-input input:focus{border-color:var(--muted)}
+  .chat-input button{
+    border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;
+    background:var(--accent);color:var(--bg);font-size:1rem;flex-shrink:0;
+    transition:background .25s;
+  }
+  .chat-input button:hover{background:#c5663f}
+  .chat-input button:disabled{background:var(--line);cursor:default}
+  @media(max-width:480px){
+    .chat-panel{right:14px;bottom:96px}
+    .chat-fab{right:14px;bottom:20px}
+  }
+
   /* ---------- Reveal animation ---------- */
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
   .reveal.visible{opacity:1;transform:none}
@@ -445,6 +515,26 @@
   </div>
 </section>
 
+<!-- Chat widget -->
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat">
+  <div class="chat-head">
+    <svg aria-hidden="true"><use href="#mark"/></svg>
+    <div>
+      <div class="t">n. — <span data-i18n="chat_title">asistente de naitre</span></div>
+      <div class="s" data-i18n="chat_status">en línea</div>
+    </div>
+    <button class="close" id="chatClose" aria-label="Cerrar">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input id="chatInput" type="text" autocomplete="off" placeholder="Escribe tu mensaje…">
+    <button id="chatSend" aria-label="Enviar">➤</button>
+  </div>
+</div>
+<button class="chat-fab" id="chatFab" aria-label="Abrir chat">
+  <svg aria-hidden="true"><use href="#mark"/></svg>
+</button>
+
 <footer>
   <div class="footer-inner">
     <a href="#" class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#mark"/></svg>naitre<span>.</span></a>
@@ -493,7 +583,12 @@ const i18n = {
     contact_intro:"Cuéntanos qué quieres construir y te responderemos en menos de 48 horas.",
     f_name:"Nombre", f_email:"Email", f_msg:"Cuéntanos tu proyecto", f_send:"Enviar",
     f_note:"El formulario abrirá tu cliente de correo con el mensaje listo para enviar.",
-    footer:"© 2026 naitre — estudio de desarrollo de software"
+    footer:"© 2026 naitre — estudio de desarrollo de software",
+    chat_title:"asistente de naitre",
+    chat_status:"en línea",
+    chat_hello:"¡Hola! Soy n., el asistente de naitre. ¿Qué quieres construir? Puedo contarte sobre nuestros servicios de IA, webs, apps móviles, IoT y más.",
+    chat_error:"Ups, no pude responder ahora mismo. Inténtalo de nuevo o escríbenos a hola@naitre.dev.",
+    chat_ph:"Escribe tu mensaje…"
   },
   en: {
     nav_services:"Services", nav_about:"About", nav_contact:"Contact", nav_ai:"AI",
@@ -534,7 +629,12 @@ const i18n = {
     contact_intro:"Tell us what you want to build and we'll get back to you within 48 hours.",
     f_name:"Name", f_email:"Email", f_msg:"Tell us about your project", f_send:"Send",
     f_note:"The form will open your email client with the message ready to send.",
-    footer:"© 2026 naitre — software development studio"
+    footer:"© 2026 naitre — software development studio",
+    chat_title:"naitre assistant",
+    chat_status:"online",
+    chat_hello:"Hi! I'm n., naitre's assistant. What do you want to build? I can tell you about our AI services, websites, mobile apps, IoT and more.",
+    chat_error:"Oops, I couldn't reply right now. Try again or email us at hola@naitre.dev.",
+    chat_ph:"Type your message…"
   }
 };
 
@@ -552,6 +652,8 @@ function setLang(l){
     const k = el.getAttribute('data-i18n-html');
     if(i18n[l][k]) el.innerHTML = i18n[l][k];
   });
+  const ci = document.getElementById('chatInput');
+  if(ci) ci.placeholder = i18n[l].chat_ph;
 }
 
 function sendMail(e){
@@ -564,6 +666,72 @@ function sendMail(e){
   window.location.href = 'mailto:hola@naitre.dev?subject='+subject+'&body='+body;
   return false;
 }
+
+/* ---------- chat widget ---------- */
+const chatPanel = document.getElementById('chatPanel');
+const chatBody  = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const chatSend  = document.getElementById('chatSend');
+let chatHistory = [];   // {role, content}
+let chatOpened = false, chatBusy = false;
+
+function addMsg(role, text){
+  const el = document.createElement('div');
+  el.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  el.textContent = text;
+  chatBody.appendChild(el);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return el;
+}
+function addTyping(){
+  const el = document.createElement('div');
+  el.className = 'msg bot typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  chatBody.appendChild(el);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return el;
+}
+
+function toggleChat(open){
+  chatPanel.classList.toggle('open', open);
+  if(open && !chatOpened){
+    chatOpened = true;
+    addMsg('assistant', i18n[lang].chat_hello);
+  }
+  if(open) chatInput.focus();
+}
+document.getElementById('chatFab').addEventListener('click', ()=>toggleChat(!chatPanel.classList.contains('open')));
+document.getElementById('chatClose').addEventListener('click', ()=>toggleChat(false));
+
+async function sendChat(){
+  const text = chatInput.value.trim();
+  if(!text || chatBusy) return;
+  chatInput.value = '';
+  addMsg('user', text);
+  chatHistory.push({role:'user', content:text});
+  chatBusy = true; chatSend.disabled = true;
+  const typing = addTyping();
+  try{
+    const r = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages: chatHistory.slice(-12), lang})
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    typing.remove();
+    const reply = data.reply || i18n[lang].chat_error;
+    addMsg('assistant', reply);
+    chatHistory.push({role:'assistant', content:reply});
+  }catch(err){
+    typing.remove();
+    addMsg('assistant', i18n[lang].chat_error);
+  }finally{
+    chatBusy = false; chatSend.disabled = false; chatInput.focus();
+  }
+}
+chatSend.addEventListener('click', sendChat);
+chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter') sendChat(); });
 
 /* mobile menu */
 const menuBtn = document.getElementById('menuBtn');
