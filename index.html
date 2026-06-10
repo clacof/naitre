@@ -4,29 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>naitre — Estudio de desarrollo de software</title>
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="46" fill="none" stroke="%23141413" stroke-width="2" stroke-dasharray="1 4.7"/%3E%3Cpath d="M50 4 A46 46 0 0 1 81.1 83.9" fill="none" stroke="%23d97757" stroke-width="4" stroke-linecap="round"/%3E%3Ccircle cx="50" cy="50" r="13" fill="%23d97757"/%3E%3Ccircle cx="50" cy="50" r="6.5" fill="none" stroke="%23faf9f5" stroke-width="2.5"/%3E%3C/svg%3E'>
-<meta name="description" content="naitre — estudio de desarrollo de software. Webs, apps móviles, IoT y software a medida. Donde las ideas nacen.">
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="46" fill="none" stroke="%23191713" stroke-width="2" stroke-dasharray="1 4.7"/%3E%3Cpath d="M50 4 A46 46 0 0 1 81.1 83.9" fill="none" stroke="%23c96342" stroke-width="4" stroke-linecap="round"/%3E%3Ccircle cx="50" cy="50" r="13" fill="%23c96342"/%3E%3Ccircle cx="50" cy="50" r="6.5" fill="none" stroke="%23f9f7f1" stroke-width="2.5"/%3E%3C/svg%3E'>
+<meta name="description" content="naitre — estudio de desarrollo de software. IA, webs, apps móviles, IoT y software a medida. Donde las ideas nacen.">
+<link rel="canonical" href="https://naitre.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="naitre">
+<meta property="og:title" content="naitre — estudio de desarrollo de software">
+<meta property="og:description" content="Donde las ideas nacen. IA, automatizaciones, webs, apps móviles, IoT y software a medida.">
+<meta property="og:url" content="https://naitre.vercel.app/">
+<meta property="og:image" content="https://naitre.vercel.app/brand/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="naitre — estudio de desarrollo de software">
+<meta name="twitter:description" content="Donde las ideas nacen. IA, automatizaciones, webs, apps móviles, IoT y software a medida.">
+<meta name="twitter:image" content="https://naitre.vercel.app/brand/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"naitre","url":"https://naitre.vercel.app/","email":"hola@naitre.dev","description":"Estudio de desarrollo de software: IA, webs, apps móviles, IoT y software a medida.","logo":"https://naitre.vercel.app/brand/logo.svg"}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#faf9f5;
-    --ink:#141413;
-    --muted:#7a786f;
-    --line:#e8e6dc;
-    --accent:#d97757;
-    --accent-blue:#6a9bcc;
-    --accent-green:#788c5d;
-    --serif:'Poppins',Arial,sans-serif;
-    --sans:'Lora',Georgia,serif;
+    --bg:#f9f7f1;
+    --ink:#191713;
+    --muted:#7b7669;
+    --line:#e6e2d5;
+    --accent:#c96342;
+    --accent-blue:#5d7e9c;
+    --accent-green:#6f7d54;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Lora',Georgia,serif;
+    --label:'Poppins',Arial,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
     background:var(--bg);
     color:var(--ink);
-    font-family:var(--sans);
+    font-family:var(--body);
     font-weight:400;
     line-height:1.7;
     -webkit-font-smoothing:antialiased;
@@ -38,7 +55,7 @@
   /* ---------- Nav ---------- */
   nav{
     position:fixed;top:0;left:0;right:0;z-index:100;
-    background:rgba(250,248,244,.85);
+    background:rgba(249,247,241,.85);
     backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);
   }
@@ -47,8 +64,8 @@
     display:flex;align-items:center;justify-content:space-between;
   }
   .logo{
-    font-family:var(--serif);font-size:1.7rem;font-weight:500;
-    letter-spacing:.02em;text-decoration:none;color:var(--ink);
+    font-family:var(--display);font-size:1.7rem;font-weight:450;
+    letter-spacing:0;text-decoration:none;color:var(--ink);
     display:inline-flex;align-items:center;gap:12px;
   }
   .logo span{color:var(--accent)}
@@ -58,7 +75,7 @@
   .nav-links a{
     text-decoration:none;color:var(--muted);font-size:.78rem;
     letter-spacing:.12em;text-transform:uppercase;font-weight:400;
-    font-family:var(--serif);transition:color .25s;
+    font-family:var(--label);transition:color .25s;
   }
   .nav-links a:hover{color:var(--ink)}
   .lang-switch{
@@ -66,7 +83,7 @@
   }
   .lang-switch button{
     border:none;background:transparent;cursor:pointer;
-    font-family:var(--serif);font-size:.75rem;font-weight:500;
+    font-family:var(--label);font-size:.75rem;font-weight:500;
     letter-spacing:.08em;padding:4px 12px;border-radius:999px;
     color:var(--muted);transition:all .25s;
   }
@@ -80,16 +97,17 @@
   }
   .hero-content{position:relative;z-index:2}
   .hero-eyebrow{
-    font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--accent);font-weight:500;margin-bottom:28px;
+    font-family:var(--label);font-size:.78rem;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:28px;
   }
+  .hero-mark-sm{display:none}
   h1{
-    font-family:var(--serif);font-weight:500;
+    font-family:var(--display);font-weight:400;
     font-size:clamp(2.6rem,7vw,5rem);
-    line-height:1.1;letter-spacing:-.02em;
+    line-height:1.08;letter-spacing:-.01em;
     max-width:16ch;
   }
-  h1 em{font-style:normal;color:var(--accent)}
+  h1 em{font-style:italic;font-weight:380;color:var(--accent)}
   .hero-sub{
     margin-top:32px;max-width:46ch;font-size:1.05rem;color:var(--muted);
   }
@@ -97,7 +115,7 @@
   .btn{
     display:inline-block;text-decoration:none;font-size:.8rem;
     letter-spacing:.12em;text-transform:uppercase;font-weight:500;
-    font-family:var(--serif);padding:16px 36px;border-radius:999px;transition:all .3s;
+    font-family:var(--label);padding:16px 36px;border-radius:999px;transition:all .3s;
   }
   .btn-primary{background:var(--ink);color:var(--bg);border:1px solid var(--ink)}
   .btn-primary:hover{background:var(--accent);border-color:var(--accent)}
@@ -113,13 +131,29 @@
   @media(prefers-reduced-motion:reduce){.hero-mark{animation:none}}
 
   /* ---------- Sections ---------- */
-  section{padding:120px 0;border-top:1px solid var(--line)}
-  .section-label{
-    font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--accent);font-weight:500;margin-bottom:20px;
+  section{padding:120px 0;border-top:1px solid var(--line);position:relative}
+  section::after{
+    content:"";position:absolute;top:0;left:0;right:0;height:7px;
+    background-image:repeating-linear-gradient(90deg,var(--line) 0,var(--line) 1px,transparent 1px,transparent 56px);
+    pointer-events:none;
   }
+  .ai-section::after{content:none}
+  .label-row{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:16px;margin-bottom:20px;
+  }
+  .label-row .section-label{margin-bottom:0}
+  .section-label{
+    font-family:var(--label);font-size:.78rem;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:20px;
+  }
+  .fig{
+    font-family:var(--label);font-size:.66rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);opacity:.75;white-space:nowrap;
+  }
+  .ai-section .fig{color:#a9a499}
   h2{
-    font-family:var(--serif);font-weight:500;
+    font-family:var(--display);font-weight:400;
     font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.15;
     max-width:22ch;margin-bottom:24px;
   }
@@ -132,9 +166,9 @@
   }
   .ai-section .section-label{color:var(--accent)}
   .ai-section h2{color:var(--bg);max-width:26ch}
-  .ai-section .section-intro{color:#b0aea5}
+  .ai-section .section-intro{color:#a9a499}
   .ai-badge{
-    display:inline-block;font-family:var(--serif);font-size:.72rem;
+    display:inline-block;font-family:var(--label);font-size:.72rem;
     letter-spacing:.2em;text-transform:uppercase;font-weight:500;
     color:var(--ink);background:var(--accent);border-radius:999px;
     padding:6px 16px;margin-bottom:24px;
@@ -148,18 +182,19 @@
   .ai-card{
     background:var(--ink);padding:40px 32px;transition:background .35s;
   }
-  .ai-card:hover{background:#1f1e1c}
-  .ai-card .dot{
-    display:block;width:10px;height:10px;border-radius:50%;margin-bottom:22px;
+  .ai-card:hover{background:#221f19}
+  .ai-card .idx{
+    display:block;font-family:var(--display);font-style:italic;
+    font-size:.95rem;margin-bottom:20px;
   }
-  .ai-card:nth-child(3n+1) .dot{background:var(--accent)}
-  .ai-card:nth-child(3n+2) .dot{background:var(--accent-blue)}
-  .ai-card:nth-child(3n) .dot{background:var(--accent-green)}
+  .ai-card:nth-child(3n+1) .idx{color:var(--accent)}
+  .ai-card:nth-child(3n+2) .idx{color:var(--accent-blue)}
+  .ai-card:nth-child(3n) .idx{color:var(--accent-green)}
   .ai-card h3{
-    font-family:var(--serif);font-weight:500;font-size:1.15rem;
+    font-family:var(--display);font-weight:450;font-size:1.15rem;
     margin-bottom:12px;color:var(--bg);
   }
-  .ai-card p{font-size:.9rem;color:#b0aea5}
+  .ai-card p{font-size:.9rem;color:#a9a499}
   .ai-cta{margin-top:56px}
   .ai-cta .btn{background:var(--accent);border:1px solid var(--accent);color:var(--ink)}
   .ai-cta .btn:hover{background:var(--bg);border-color:var(--bg)}
@@ -176,14 +211,58 @@
   }
   .service:hover{background:#fff}
   .service-num{
-    font-family:var(--serif);font-style:italic;font-size:1rem;
+    font-family:var(--display);font-style:italic;font-size:1rem;
     color:var(--accent);display:block;margin-bottom:20px;
   }
   .service h3{
-    font-family:var(--serif);font-weight:500;font-size:1.5rem;
+    font-family:var(--display);font-weight:450;font-size:1.5rem;
     margin-bottom:14px;line-height:1.2;
   }
   .service p{font-size:.92rem;color:var(--muted)}
+
+  /* ---------- Clickable cards + detail modal ---------- */
+  .service,.ai-card{cursor:pointer}
+  .service:focus-visible,.ai-card:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .more{
+    display:inline-block;margin-top:18px;
+    font-family:var(--label);font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:500;color:var(--accent);
+    opacity:.7;transition:opacity .25s,transform .25s;
+  }
+  .service:hover .more,.ai-card:hover .more{opacity:1;transform:translateX(4px)}
+  .svc-modal{
+    position:fixed;inset:0;z-index:400;display:none;
+    align-items:center;justify-content:center;padding:24px;
+  }
+  .svc-modal.open{display:flex}
+  .svc-backdrop{
+    position:absolute;inset:0;background:rgba(20,20,19,.55);
+    backdrop-filter:blur(6px);
+  }
+  .svc-box{
+    position:relative;background:var(--bg);border:1px solid var(--line);
+    border-radius:18px;max-width:620px;width:100%;max-height:85vh;
+    overflow-y:auto;padding:48px;
+    box-shadow:0 32px 80px rgba(20,20,19,.3);
+  }
+  .svc-box h3{
+    font-family:var(--display);font-weight:450;font-size:1.7rem;
+    margin-bottom:18px;line-height:1.2;padding-right:32px;
+  }
+  .svc-body p{color:var(--muted);font-size:.97rem;margin-bottom:8px}
+  .svc-body ul{list-style:none;margin:20px 0 8px;border-top:1px solid var(--line)}
+  .svc-body li{
+    padding:13px 0;border-bottom:1px solid var(--line);
+    font-size:.92rem;display:flex;gap:14px;align-items:baseline;
+  }
+  .svc-body li::before{content:"—";color:var(--accent);flex-shrink:0}
+  .svc-box .btn{margin-top:28px}
+  .svc-close{
+    position:absolute;top:20px;right:20px;background:none;border:none;
+    cursor:pointer;font-size:1.2rem;color:var(--muted);line-height:1;padding:6px;
+  }
+  .svc-close:hover{color:var(--ink)}
+  @media(max-width:560px){.svc-box{padding:32px 24px}}
 
   /* ---------- About ---------- */
   .about-grid{
@@ -197,7 +276,7 @@
     display:flex;gap:24px;align-items:baseline;
   }
   .pillars .k{
-    font-family:var(--serif);font-style:italic;color:var(--accent);
+    font-family:var(--display);font-style:italic;color:var(--accent);
     min-width:36px;font-size:1.05rem;
   }
   .pillars .t strong{display:block;font-weight:500;font-size:.95rem;margin-bottom:2px}
@@ -206,7 +285,7 @@
   /* ---------- Contact ---------- */
   .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:8px}
   .contact-email{
-    font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);
+    font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);
     color:var(--ink);text-decoration:none;border-bottom:1px solid var(--accent);
     transition:color .25s;
   }
@@ -214,12 +293,12 @@
   form{display:flex;flex-direction:column;gap:0}
   .field{border-bottom:1px solid var(--line);padding:18px 0}
   .field label{
-    display:block;font-size:.72rem;letter-spacing:.18em;
+    display:block;font-family:var(--label);font-size:.72rem;letter-spacing:.18em;
     text-transform:uppercase;color:var(--muted);margin-bottom:6px;
   }
   .field input,.field textarea{
     width:100%;border:none;background:transparent;outline:none;
-    font-family:var(--sans);font-size:1rem;font-weight:300;color:var(--ink);
+    font-family:var(--body);font-size:1rem;font-weight:300;color:var(--ink);
     resize:vertical;
   }
   form .btn{margin-top:36px;align-self:flex-start;cursor:pointer}
@@ -243,8 +322,23 @@
     box-shadow:0 8px 28px rgba(20,20,19,.25);
     transition:transform .25s,background .25s;
   }
-  .chat-fab:hover{transform:scale(1.06);background:#262522}
+  .chat-fab:hover{transform:scale(1.06);background:#242018}
   .chat-fab svg{width:30px;height:30px}
+  .chat-fab::before{
+    content:"";position:absolute;inset:-4px;border-radius:50%;
+    border:2px solid var(--accent);opacity:0;
+    animation:chat-pulse 3.2s ease-out infinite;
+  }
+  @keyframes chat-pulse{
+    0%{transform:scale(.85);opacity:.55}
+    60%{transform:scale(1.25);opacity:0}
+    100%{transform:scale(1.25);opacity:0}
+  }
+  .chat-fab.open::before{animation:none}
+  .chat-fab .icon-close{display:none}
+  .chat-fab.open .icon-close{display:block}
+  .chat-fab.open .icon-chat{display:none}
+  @media(prefers-reduced-motion:reduce){.chat-fab::before{animation:none}}
   .chat-panel{
     position:fixed;right:28px;bottom:104px;z-index:300;
     width:min(380px,calc(100vw - 40px));height:min(540px,calc(100vh - 140px));
@@ -258,11 +352,10 @@
     padding:16px 20px;display:flex;align-items:center;gap:12px;
   }
   .chat-head svg{width:30px;height:30px;color:var(--bg);flex-shrink:0}
-  .chat-head .t{font-family:var(--serif);font-weight:500;font-size:.95rem;line-height:1.3}
-  .chat-head .s{font-size:.72rem;color:#b0aea5;display:flex;align-items:center;gap:6px}
-  .chat-head .s::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent-green)}
+  .chat-head .t{font-family:var(--display);font-weight:450;font-size:.95rem;line-height:1.3}
+  .chat-head .s{font-size:.72rem;color:#a9a499}
   .chat-head .close{
-    margin-left:auto;background:none;border:none;color:#b0aea5;cursor:pointer;
+    margin-left:auto;background:none;border:none;color:#a9a499;cursor:pointer;
     font-size:1.1rem;line-height:1;padding:4px;
   }
   .chat-head .close:hover{color:var(--bg)}
@@ -273,7 +366,7 @@
     max-width:85%;padding:11px 15px;border-radius:14px;
     font-size:.9rem;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;
   }
-  .msg.bot{background:var(--light,#e8e6dc);background:#efede4;color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
+  .msg.bot{background:#eeeadf;color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
   .msg.user{background:var(--ink);color:var(--bg);border-bottom-right-radius:4px;align-self:flex-end}
   .msg.typing span{
     display:inline-block;width:6px;height:6px;border-radius:50%;
@@ -288,16 +381,17 @@
   }
   .chat-input input{
     flex:1;border:1px solid var(--line);border-radius:999px;
-    padding:11px 18px;font-family:var(--sans);font-size:.9rem;
+    padding:11px 18px;font-family:var(--body);font-size:.9rem;
     background:#fff;color:var(--ink);outline:none;
   }
   .chat-input input:focus{border-color:var(--muted)}
   .chat-input button{
     border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;
-    background:var(--accent);color:var(--bg);font-size:1rem;flex-shrink:0;
+    background:var(--accent);color:var(--bg);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
     transition:background .25s;
   }
-  .chat-input button:hover{background:#c5663f}
+  .chat-input button:hover{background:#a84e31}
   .chat-input button:disabled{background:var(--line);cursor:default}
   @media(max-width:480px){
     .chat-panel{right:14px;bottom:96px}
@@ -320,6 +414,7 @@
     .about-grid,.contact-wrap{grid-template-columns:1fr;gap:48px}
     section{padding:80px 0}
     .hero-mark{display:none}
+    .hero-mark-sm{display:block;width:64px;height:64px;margin-bottom:28px;color:var(--ink)}
   }
 </style>
 </head>
@@ -361,18 +456,19 @@
       <li><a href="#contacto" data-i18n="nav_contact">Contacto</a></li>
       <li>
         <div class="lang-switch">
-          <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
-          <button id="btn-en" onclick="setLang('en')">EN</button>
+          <button id="btn-es" class="active" aria-pressed="true" onclick="setLang('es')">ES</button>
+          <button id="btn-en" aria-pressed="false" onclick="setLang('en')">EN</button>
         </div>
       </li>
     </ul>
-    <button class="menu-btn" id="menuBtn" aria-label="Menú">☰</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menú"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   </div>
 </nav>
 
 <header>
   <svg class="hero-mark" aria-hidden="true"><use href="#mark"/></svg>
   <div class="container hero-content">
+    <svg class="hero-mark-sm" aria-hidden="true"><use href="#mark"/></svg>
     <p class="hero-eyebrow" data-i18n="hero_eyebrow">naître · nacer · estudio de software</p>
     <h1 data-i18n-html="hero_title">Donde las ideas <em>nacen</em> y se convierten en software</h1>
     <p class="hero-sub" data-i18n="hero_sub">Diseñamos y desarrollamos productos digitales de principio a fin: soluciones con IA, automatizaciones, webs, aplicaciones móviles, IoT y software a medida.</p>
@@ -386,37 +482,40 @@
 <section id="ia" class="ai-section">
   <div class="container">
     <span class="ai-badge" data-i18n="ai_badge">Línea de productos IA</span>
-    <p class="section-label reveal" data-i18n="ai_label">Inteligencia Artificial</p>
+    <div class="label-row reveal">
+      <p class="section-label" data-i18n="ai_label">Inteligencia Artificial</p>
+      <span class="fig" aria-hidden="true">fig. 02 · intelligence</span>
+    </div>
     <h2 class="reveal" data-i18n="ai_title">IA y automatización que transforman tu negocio</h2>
     <p class="section-intro reveal" data-i18n="ai_intro">Integramos inteligencia artificial en el corazón de tus procesos: desde agentes que trabajan por ti hasta automatizaciones que eliminan el trabajo repetitivo.</p>
     <div class="ai-grid">
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.01</span>
         <h3 data-i18n="ai1_t">Agentes IA</h3>
         <p data-i18n="ai1_d">Agentes autónomos que ejecutan tareas complejas: atención al cliente, operaciones, análisis y más.</p>
       </div>
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.02</span>
         <h3 data-i18n="ai2_t">Automatización de procesos</h3>
         <p data-i18n="ai2_d">Workflows inteligentes que conectan tus herramientas y eliminan horas de trabajo manual cada semana.</p>
       </div>
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.03</span>
         <h3 data-i18n="ai3_t">Chatbots y asistentes</h3>
         <p data-i18n="ai3_d">Asistentes conversacionales entrenados con tu conocimiento, disponibles 24/7 en web, WhatsApp o donde estén tus clientes.</p>
       </div>
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.04</span>
         <h3 data-i18n="ai4_t">Integración de LLMs</h3>
         <p data-i18n="ai4_d">Llevamos modelos de lenguaje a tus productos: búsqueda semántica, generación de contenido, copilotos internos.</p>
       </div>
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.05</span>
         <h3 data-i18n="ai5_t">Datos y predicción</h3>
         <p data-i18n="ai5_d">Modelos de machine learning y analítica avanzada para anticipar demanda, detectar anomalías y decidir mejor.</p>
       </div>
       <div class="ai-card reveal">
-        <span class="dot"></span>
+        <span class="idx" aria-hidden="true">n.06</span>
         <h3 data-i18n="ai6_t">Consultoría IA</h3>
         <p data-i18n="ai6_d">Auditamos tus procesos, identificamos oportunidades de IA y diseñamos una hoja de ruta con retorno medible.</p>
       </div>
@@ -429,7 +528,10 @@
 
 <section id="servicios">
   <div class="container">
-    <p class="section-label reveal" data-i18n="serv_label">Servicios</p>
+    <div class="label-row reveal">
+      <p class="section-label" data-i18n="serv_label">Servicios</p>
+      <span class="fig" aria-hidden="true">fig. 03 · services</span>
+    </div>
     <h2 class="reveal" data-i18n="serv_title">Todo lo que tu producto necesita para nacer</h2>
     <p class="section-intro reveal" data-i18n="serv_intro">Del concepto al lanzamiento, cubrimos el ciclo completo de desarrollo con un equipo que cuida cada detalle.</p>
     <div class="services-grid">
@@ -469,7 +571,10 @@
 
 <section id="nosotros">
   <div class="container">
-    <p class="section-label reveal" data-i18n="about_label">Nosotros</p>
+    <div class="label-row reveal">
+      <p class="section-label" data-i18n="about_label">Nosotros</p>
+      <span class="fig" aria-hidden="true">fig. 04 · origine</span>
+    </div>
     <div class="about-grid">
       <div class="about-text">
         <h2 class="reveal" data-i18n="about_title">Un estudio pequeño con ambición grande</h2>
@@ -488,7 +593,10 @@
 
 <section id="contacto">
   <div class="container">
-    <p class="section-label reveal" data-i18n="contact_label">Contacto</p>
+    <div class="label-row reveal">
+      <p class="section-label" data-i18n="contact_label">Contacto</p>
+      <span class="fig" aria-hidden="true">fig. 05 · contact</span>
+    </div>
     <h2 class="reveal" data-i18n="contact_title">¿Tienes una idea? Hagámosla nacer.</h2>
     <div class="contact-wrap">
       <div class="reveal">
@@ -515,29 +623,51 @@
   </div>
 </section>
 
+<!-- Service detail modal -->
+<div class="svc-modal" id="svcModal" role="dialog" aria-modal="true">
+  <div class="svc-backdrop" id="svcBackdrop"></div>
+  <div class="svc-box">
+    <button class="svc-close" id="svcClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    <p class="section-label" id="svcLabel"></p>
+    <h3 id="svcTitle"></h3>
+    <div class="svc-body" id="svcBody"></div>
+    <a href="#contacto" class="btn btn-primary" id="svcCta">Empezar un proyecto</a>
+  </div>
+</div>
+
 <!-- Chat widget -->
 <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat">
   <div class="chat-head">
     <svg aria-hidden="true"><use href="#mark"/></svg>
     <div>
       <div class="t">n. — <span data-i18n="chat_title">asistente de naitre</span></div>
-      <div class="s" data-i18n="chat_status">en línea</div>
+      <div class="s" data-i18n="chat_status">respuestas generadas por IA</div>
     </div>
-    <button class="close" id="chatClose" aria-label="Cerrar">✕</button>
+    <button class="close" id="chatClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
   <div class="chat-body" id="chatBody"></div>
   <div class="chat-input">
     <input id="chatInput" type="text" autocomplete="off" placeholder="Escribe tu mensaje…">
-    <button id="chatSend" aria-label="Enviar">➤</button>
+    <button id="chatSend" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 </div>
 <button class="chat-fab" id="chatFab" aria-label="Abrir chat">
-  <svg aria-hidden="true"><use href="#mark"/></svg>
+  <svg class="icon-chat" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M10 5.5 h12 a6 6 0 0 1 6 6 v7 a6 6 0 0 1 -6 6 h-7.5 l-5.5 4.5 v-4.5 h-0.5 a6 6 0 0 1 -6 -6 v-7 a6 6 0 0 1 6 -6 z"
+          fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+    <circle cx="10.8" cy="15" r="1.7" fill="currentColor"/>
+    <circle cx="16"   cy="15" r="1.9" fill="var(--accent)"/>
+    <circle cx="21.2" cy="15" r="1.7" fill="currentColor"/>
+  </svg>
+  <svg class="icon-close" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M10 10 L22 22 M22 10 L10 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  </svg>
 </button>
 
 <footer>
   <div class="footer-inner">
     <a href="#" class="logo"><svg class="logo-mark" aria-hidden="true"><use href="#mark"/></svg>naitre<span>.</span></a>
+    <p class="fig" aria-hidden="true">fig. 01 · cartographie de l'émergence</p>
     <p data-i18n="footer">© 2026 naitre — estudio de desarrollo de software</p>
   </div>
 </footer>
@@ -545,6 +675,8 @@
 <script>
 const i18n = {
   es: {
+    doc_title:"naitre — Estudio de desarrollo de software",
+    doc_desc:"naitre — estudio de desarrollo de software. IA, webs, apps móviles, IoT y software a medida. Donde las ideas nacen.",
     nav_services:"Servicios", nav_about:"Nosotros", nav_contact:"Contacto", nav_ai:"IA",
     hero_eyebrow:"naître · nacer · estudio de software",
     hero_title:'Donde las ideas <em>nacen</em> y se convierten en software',
@@ -585,12 +717,28 @@ const i18n = {
     f_note:"El formulario abrirá tu cliente de correo con el mensaje listo para enviar.",
     footer:"© 2026 naitre — estudio de desarrollo de software",
     chat_title:"asistente de naitre",
-    chat_status:"en línea",
+    chat_status:"respuestas generadas por IA",
     chat_hello:"¡Hola! Soy n., el asistente de naitre. ¿Qué quieres construir? Puedo contarte sobre nuestros servicios de IA, webs, apps móviles, IoT y más.",
     chat_error:"Ups, no pude responder ahora mismo. Inténtalo de nuevo o escríbenos a hola@naitre.dev.",
-    chat_ph:"Escribe tu mensaje…"
+    chat_ph:"Escribe tu mensaje…",
+    more_label:"Ver más +",
+    modal_cta:"Empezar un proyecto",
+    s1_long:"<p>Construimos desde landing pages hasta plataformas web complejas, con rendimiento, SEO y accesibilidad como base, no como extras.</p><ul><li>Sitios corporativos y e-commerce a medida</li><li>Aplicaciones web: SaaS, paneles, portales de cliente</li><li>Rendimiento, SEO técnico y accesibilidad</li><li>Stack moderno: React, Next.js, Node</li></ul>",
+    s2_long:"<p>Apps nativas y multiplataforma con foco en la experiencia. Te acompañamos desde la idea hasta la publicación en las stores y su mantenimiento.</p><ul><li>iOS y Android nativos (Swift, Kotlin)</li><li>Multiplataforma con Flutter o React Native</li><li>Push, pagos, geolocalización, modo offline</li><li>Publicación y mantenimiento en App Store y Google Play</li></ul>",
+    s3_long:"<p>Conectamos dispositivos físicos con plataformas digitales para capturar datos del mundo real y actuar sobre él en tiempo real.</p><ul><li>Firmware y prototipado electrónico</li><li>Conectividad: WiFi, BLE, LoRa, MQTT</li><li>Plataformas de telemetría y dashboards en vivo</li><li>Alertas y mantenimiento predictivo</li></ul>",
+    s4_long:"<p>Sistemas diseñados alrededor de tus procesos: gestión interna, integraciones y automatización de operaciones que hoy viven en hojas de cálculo.</p><ul><li>Sistemas de gestión internos (mini-ERP, CRM)</li><li>Integraciones entre herramientas y APIs</li><li>Modernización de sistemas legados</li><li>Reporting y paneles de control</li></ul>",
+    s5_long:"<p>Diseño centrado en usuarios y datos: investigamos, prototipamos y validamos antes de escribir una sola línea de código.</p><ul><li>Research y tests con usuarios</li><li>Wireframes y prototipos interactivos</li><li>Sistemas de diseño y guías de estilo</li><li>Auditorías de usabilidad de productos existentes</li></ul>",
+    s6_long:"<p>Infraestructura que escala contigo: automatizamos despliegues y operamos tu plataforma con observabilidad completa.</p><ul><li>Arquitectura en AWS, GCP, Azure o Vercel</li><li>CI/CD y despliegues automatizados</li><li>Contenedores y Kubernetes</li><li>Monitorización, logging y alertas</li></ul>",
+    ai1_long:"<p>Agentes autónomos que razonan, usan herramientas y completan procesos de principio a fin, con supervisión humana donde importa.</p><ul><li>Atención al cliente de primer y segundo nivel</li><li>Operaciones repetitivas de back-office</li><li>Investigación, síntesis y redacción</li><li>Integrados con tus sistemas y datos</li></ul>",
+    ai2_long:"<p>Auditamos tus flujos de trabajo y los convertimos en workflows automáticos que ahorran horas cada semana y eliminan errores manuales.</p><ul><li>Orquestación entre CRM, email, ERP y más</li><li>Extracción y clasificación de documentos</li><li>Aprobaciones, recordatorios y notificaciones</li><li>Con plataformas (n8n, Make) o 100% a medida</li></ul>",
+    ai3_long:"<p>Asistentes entrenados con tu conocimiento, que hablan con el tono de tu marca y derivan a una persona cuando hace falta.</p><ul><li>Web, WhatsApp, Instagram, Slack</li><li>RAG sobre tus documentos y FAQs</li><li>Captura y calificación de leads</li><li>Analítica de conversaciones</li></ul>",
+    ai4_long:"<p>Integramos modelos de lenguaje (OpenAI, Anthropic, open source) en tus productos, con evaluación de calidad y control de costes.</p><ul><li>Búsqueda semántica y RAG</li><li>Generación y resumen de contenido</li><li>Copilotos internos para tu equipo</li><li>Fine-tuning y evaluación continua</li></ul>",
+    ai5_long:"<p>Modelos que convierten tu histórico de datos en decisiones: prever, segmentar y detectar antes de que ocurra.</p><ul><li>Forecasting de demanda y ventas</li><li>Scoring y segmentación de clientes</li><li>Detección de fraude y anomalías</li><li>Pipelines de datos y dashboards</li></ul>",
+    ai6_long:"<p>Una hoja de ruta pragmática: identificamos los casos de uso con mayor retorno y los validamos con pilotos rápidos, sin humo.</p><ul><li>Auditoría de procesos y datos</li><li>Priorización por impacto y esfuerzo</li><li>Pilotos funcionando en semanas</li><li>Formación de tu equipo</li></ul>"
   },
   en: {
+    doc_title:"naitre — Software development studio",
+    doc_desc:"naitre — software development studio. AI, websites, mobile apps, IoT and custom software. Where ideas are born.",
     nav_services:"Services", nav_about:"About", nav_contact:"Contact", nav_ai:"AI",
     hero_eyebrow:"naître · to be born · software studio",
     hero_title:'Where ideas are <em>born</em> and become software',
@@ -631,10 +779,24 @@ const i18n = {
     f_note:"The form will open your email client with the message ready to send.",
     footer:"© 2026 naitre — software development studio",
     chat_title:"naitre assistant",
-    chat_status:"online",
+    chat_status:"AI-generated replies",
     chat_hello:"Hi! I'm n., naitre's assistant. What do you want to build? I can tell you about our AI services, websites, mobile apps, IoT and more.",
     chat_error:"Oops, I couldn't reply right now. Try again or email us at hola@naitre.dev.",
-    chat_ph:"Type your message…"
+    chat_ph:"Type your message…",
+    more_label:"Learn more +",
+    modal_cta:"Start a project",
+    s1_long:"<p>From landing pages to complex web platforms, with performance, SEO and accessibility as the foundation — not afterthoughts.</p><ul><li>Custom corporate sites and e-commerce</li><li>Web apps: SaaS, dashboards, client portals</li><li>Performance, technical SEO and accessibility</li><li>Modern stack: React, Next.js, Node</li></ul>",
+    s2_long:"<p>Native and cross-platform apps focused on experience. We go with you from idea to store release and beyond.</p><ul><li>Native iOS and Android (Swift, Kotlin)</li><li>Cross-platform with Flutter or React Native</li><li>Push, payments, geolocation, offline mode</li><li>App Store & Google Play release and maintenance</li></ul>",
+    s3_long:"<p>We connect physical devices with digital platforms to capture real-world data and act on it in real time.</p><ul><li>Firmware and electronics prototyping</li><li>Connectivity: WiFi, BLE, LoRa, MQTT</li><li>Telemetry platforms and live dashboards</li><li>Alerts and predictive maintenance</li></ul>",
+    s4_long:"<p>Systems designed around your processes: internal management, integrations and automation of operations that live in spreadsheets today.</p><ul><li>Internal management systems (mini-ERP, CRM)</li><li>Integrations between tools and APIs</li><li>Legacy system modernization</li><li>Reporting and control panels</li></ul>",
+    s5_long:"<p>User- and data-centered design: we research, prototype and validate before writing a single line of code.</p><ul><li>Research and user testing</li><li>Wireframes and interactive prototypes</li><li>Design systems and style guides</li><li>Usability audits of existing products</li></ul>",
+    s6_long:"<p>Infrastructure that scales with you: automated deployments and full observability for your platform.</p><ul><li>Architecture on AWS, GCP, Azure or Vercel</li><li>CI/CD and automated deployments</li><li>Containers and Kubernetes</li><li>Monitoring, logging and alerting</li></ul>",
+    ai1_long:"<p>Autonomous agents that reason, use tools and complete processes end to end, with human oversight where it matters.</p><ul><li>Tier 1–2 customer support</li><li>Repetitive back-office operations</li><li>Research, synthesis and writing</li><li>Integrated with your systems and data</li></ul>",
+    ai2_long:"<p>We audit your workflows and turn them into automated pipelines that save hours every week and eliminate manual errors.</p><ul><li>Orchestration across CRM, email, ERP and more</li><li>Document extraction and classification</li><li>Approvals, reminders and notifications</li><li>With platforms (n8n, Make) or fully custom</li></ul>",
+    ai3_long:"<p>Assistants trained on your knowledge, speaking in your brand's voice and handing off to a human when needed.</p><ul><li>Web, WhatsApp, Instagram, Slack</li><li>RAG over your docs and FAQs</li><li>Lead capture and qualification</li><li>Conversation analytics</li></ul>",
+    ai4_long:"<p>We integrate language models (OpenAI, Anthropic, open source) into your products, with quality evaluation and cost control.</p><ul><li>Semantic search and RAG</li><li>Content generation and summarization</li><li>Internal copilots for your team</li><li>Fine-tuning and continuous evaluation</li></ul>",
+    ai5_long:"<p>Models that turn your historical data into decisions: forecast, segment and detect before it happens.</p><ul><li>Demand and sales forecasting</li><li>Customer scoring and segmentation</li><li>Fraud and anomaly detection</li><li>Data pipelines and dashboards</li></ul>",
+    ai6_long:"<p>A pragmatic roadmap: we identify the use cases with the highest return and validate them with fast pilots — no hype.</p><ul><li>Process and data audit</li><li>Prioritization by impact and effort</li><li>Pilots running in weeks</li><li>Team training</li></ul>"
   }
 };
 
@@ -642,8 +804,12 @@ let lang = 'es';
 function setLang(l){
   lang = l;
   document.documentElement.lang = l;
-  document.getElementById('btn-es').classList.toggle('active', l==='es');
-  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.title = i18n[l].doc_title;
+  const md = document.querySelector('meta[name="description"]');
+  if(md) md.setAttribute('content', i18n[l].doc_desc);
+  const be = document.getElementById('btn-es'), bn = document.getElementById('btn-en');
+  be.classList.toggle('active', l==='es'); be.setAttribute('aria-pressed', String(l==='es'));
+  bn.classList.toggle('active', l==='en'); bn.setAttribute('aria-pressed', String(l==='en'));
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k = el.getAttribute('data-i18n');
     if(i18n[l][k]) el.textContent = i18n[l][k];
@@ -654,6 +820,7 @@ function setLang(l){
   });
   const ci = document.getElementById('chatInput');
   if(ci) ci.placeholder = i18n[l].chat_ph;
+  if(typeof svcCurrent === 'string' && svcCurrent) fillSvc(svcCurrent);
 }
 
 function sendMail(e){
@@ -666,6 +833,60 @@ function sendMail(e){
   window.location.href = 'mailto:hola@naitre.dev?subject='+subject+'&body='+body;
   return false;
 }
+
+/* ---------- service detail modal ---------- */
+const svcModal = document.getElementById('svcModal');
+let svcCurrent = null;
+function fillSvc(id){
+  document.getElementById('svcLabel').textContent = i18n[lang][id.startsWith('ai') ? 'ai_label' : 'serv_label'];
+  document.getElementById('svcTitle').textContent = i18n[lang][id+'_t'];
+  document.getElementById('svcBody').innerHTML = i18n[lang][id+'_long'] || '';
+  document.getElementById('svcCta').textContent = i18n[lang].modal_cta;
+}
+let svcReturnFocus = null;
+function openSvc(id){
+  svcCurrent = id; fillSvc(id);
+  svcReturnFocus = document.activeElement;
+  svcModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('svcClose').focus();
+}
+function closeSvc(){
+  if(!svcCurrent) return;
+  svcCurrent = null;
+  svcModal.classList.remove('open');
+  document.body.style.overflow = '';
+  if(svcReturnFocus && svcReturnFocus.focus){ svcReturnFocus.focus(); }
+  svcReturnFocus = null;
+}
+svcModal.addEventListener('keydown', e=>{
+  if(e.key !== 'Tab') return;
+  const f = svcModal.querySelectorAll('button, a[href]');
+  const first = f[0], last = f[f.length-1];
+  if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
+document.querySelectorAll('.service, .ai-card').forEach(card=>{
+  const h = card.querySelector('h3[data-i18n]');
+  if(!h) return;
+  const id = h.getAttribute('data-i18n').replace(/_t$/,'');
+  const m = document.createElement('span');
+  m.className = 'more';
+  m.setAttribute('data-i18n','more_label');
+  m.textContent = i18n[lang].more_label;
+  card.appendChild(m);
+  card.setAttribute('role','button');
+  card.setAttribute('tabindex','0');
+  card.setAttribute('aria-haspopup','dialog');
+  card.addEventListener('click', ()=>openSvc(id));
+  card.addEventListener('keydown', e=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openSvc(id); }
+  });
+});
+document.getElementById('svcBackdrop').addEventListener('click', closeSvc);
+document.getElementById('svcClose').addEventListener('click', closeSvc);
+document.getElementById('svcCta').addEventListener('click', closeSvc);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSvc(); });
 
 /* ---------- chat widget ---------- */
 const chatPanel = document.getElementById('chatPanel');
@@ -694,6 +915,7 @@ function addTyping(){
 
 function toggleChat(open){
   chatPanel.classList.toggle('open', open);
+  document.getElementById('chatFab').classList.toggle('open', open);
   if(open && !chatOpened){
     chatOpened = true;
     addMsg('assistant', i18n[lang].chat_hello);

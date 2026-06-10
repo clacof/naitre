@@ -11,7 +11,7 @@ Space is the womb of the work. Vast quiet fields of warm ivory hold the composit
 
 ## Color and Material
 
-The palette is disciplined and warm: deep ink black (#141413) for what is already born, soft ivory (#faf9f5) as the field of possibility, and a single vital terracotta (#d97757) for the spark — the moment of ignition. Slate blue (#6a9bcc) and moss green (#788c5d) appear only as quiet systemic accents, like instrument readings at the edge of the page. Color is never atmosphere; it is information. The terracotta must feel rationed, precious, placed with the deliberation of a jeweler setting a single stone.
+The palette is disciplined and warm: deep ink black (#191713) for what is already born, soft ivory (#f9f7f1) as the field of possibility, and a single vital terracotta (#c96342) for the spark — the moment of ignition. Slate blue (#5d7e9c) and moss green (#6f7d54) appear only as quiet systemic accents, like instrument readings at the edge of the page. Color is never atmosphere; it is information. The terracotta must feel rationed, precious, placed with the deliberation of a jeweler setting a single stone.
 
 ## Scale and Rhythm
 

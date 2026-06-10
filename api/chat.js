@@ -22,20 +22,57 @@ Be friendly, clear and brief (max 3-4 sentences per reply). Never make up prices
 timelines: for quotes, refer to the contact form. Always reply in English.`
 };
 
+// --- Rate limit en memoria (por instancia serverless) ---
+// No es perfecto entre instancias, pero corta el abuso básico sin dependencias.
+const BUCKET = new Map(); // ip -> { count, reset }
+const WINDOW_MS = 60_000;
+const MAX_PER_WINDOW = 8;
+
+function rateLimited(ip) {
+  const now = Date.now();
+  const b = BUCKET.get(ip);
+  if (!b || now > b.reset) {
+    BUCKET.set(ip, { count: 1, reset: now + WINDOW_MS });
+    return false;
+  }
+  b.count++;
+  if (BUCKET.size > 5000) BUCKET.clear(); // evitar crecimiento sin límite
+  return b.count > MAX_PER_WINDOW;
+}
+
+function sameOrigin(req) {
+  const host = req.headers.host;
+  if (!host) return false;
+  const ref = req.headers.origin || req.headers.referer;
+  if (!ref) return false; // los navegadores siempre envían Origin en fetch POST
+  try {
+    return new URL(ref).host === host;
+  } catch {
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  if (!sameOrigin(req)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+  if (rateLimited(ip)) {
+    return res.status(429).json({ error: 'Too many requests' });
+  }
   if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OPENAI_API_KEY no configurada en Vercel.' });
+    console.error('OPENAI_API_KEY no configurada');
+    return res.status(500).json({ error: 'Service unavailable' });
   }
 
   try {
     const { messages = [], lang = 'es' } = req.body || {};
 
-    // Validación básica
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 40) {
       return res.status(400).json({ error: 'Invalid messages' });
     }
