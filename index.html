@@ -245,6 +245,21 @@
   }
   .chat-fab:hover{transform:scale(1.06);background:#262522}
   .chat-fab svg{width:30px;height:30px}
+  .chat-fab::before{
+    content:"";position:absolute;inset:-4px;border-radius:50%;
+    border:2px solid var(--accent);opacity:0;
+    animation:chat-pulse 3.2s ease-out infinite;
+  }
+  @keyframes chat-pulse{
+    0%{transform:scale(.85);opacity:.55}
+    60%{transform:scale(1.25);opacity:0}
+    100%{transform:scale(1.25);opacity:0}
+  }
+  .chat-fab.open::before{animation:none}
+  .chat-fab .icon-close{display:none}
+  .chat-fab.open .icon-close{display:block}
+  .chat-fab.open .icon-chat{display:none}
+  @media(prefers-reduced-motion:reduce){.chat-fab::before{animation:none}}
   .chat-panel{
     position:fixed;right:28px;bottom:104px;z-index:300;
     width:min(380px,calc(100vw - 40px));height:min(540px,calc(100vh - 140px));
@@ -532,7 +547,16 @@
   </div>
 </div>
 <button class="chat-fab" id="chatFab" aria-label="Abrir chat">
-  <svg aria-hidden="true"><use href="#mark"/></svg>
+  <svg class="icon-chat" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M10 5.5 h12 a6 6 0 0 1 6 6 v7 a6 6 0 0 1 -6 6 h-7.5 l-5.5 4.5 v-4.5 h-0.5 a6 6 0 0 1 -6 -6 v-7 a6 6 0 0 1 6 -6 z"
+          fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+    <circle cx="10.8" cy="15" r="1.7" fill="currentColor"/>
+    <circle cx="16"   cy="15" r="1.9" fill="var(--accent)"/>
+    <circle cx="21.2" cy="15" r="1.7" fill="currentColor"/>
+  </svg>
+  <svg class="icon-close" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M10 10 L22 22 M22 10 L10 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  </svg>
 </button>
 
 <footer>
@@ -694,6 +718,7 @@ function addTyping(){
 
 function toggleChat(open){
   chatPanel.classList.toggle('open', open);
+  document.getElementById('chatFab').classList.toggle('open', open);
   if(open && !chatOpened){
     chatOpened = true;
     addMsg('assistant', i18n[lang].chat_hello);
