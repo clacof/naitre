@@ -199,7 +199,8 @@
   .hero-mark{
     position:absolute;right:-12%;top:50%;transform:translateY(-50%);
     width:clamp(420px,52vw,760px);height:auto;aspect-ratio:1;
-    color:var(--line);user-select:none;pointer-events:none;z-index:1;
+    color:var(--line);--accent:var(--line);
+    user-select:none;pointer-events:none;z-index:1;
     animation:slow-spin 180s linear infinite;
   }
   @keyframes slow-spin{to{transform:translateY(-50%) rotate(360deg)}}
