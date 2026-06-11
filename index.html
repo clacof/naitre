@@ -136,7 +136,14 @@
     display:inline-flex;align-items:center;gap:12px;
   }
   .logo span{color:var(--accent)}
-  .logo-mark{width:34px;height:34px;flex-shrink:0;color:var(--ink)}
+  .logo-mark{
+    width:34px;height:34px;flex-shrink:0;color:var(--ink);
+    transition:transform 1.1s cubic-bezier(.22,1,.36,1);
+  }
+  .logo:hover .logo-mark{transform:rotate(120deg)}
+  @media (prefers-reduced-motion:reduce){
+    .logo:hover .logo-mark{transform:none}
+  }
   footer .logo-mark{width:26px;height:26px}
   .nav-links{display:flex;align-items:center;gap:36px;list-style:none}
   .nav-links a{
@@ -579,7 +586,7 @@
     <p class="section-intro reveal" data-i18n="ai_intro">Integramos inteligencia artificial en el corazón de tus procesos: desde agentes que trabajan por ti hasta automatizaciones que eliminan el trabajo repetitivo.</p>
     <div class="ai-grid">
       <div class="ai-card ai-card--feature reveal">
-        <img src="https://picsum.photos/seed/naitre-agents/1200/900" alt="" loading="lazy" width="1200" height="900">
+        <img src="brand/agents.png" alt="Cartografía de un sistema de agentes autónomos" loading="lazy" width="1200" height="900">
         <h3 data-i18n="ai1_t">Agentes IA</h3>
         <p data-i18n="ai1_d">Agentes autónomos que ejecutan tareas complejas: atención al cliente, operaciones, análisis y más.</p>
       </div>
@@ -651,7 +658,7 @@
         <p class="reveal" data-i18n="about_p1">naitre viene del francés «naître»: nacer. Creemos que todo gran producto empieza como una idea frágil que merece cuidado, criterio y buena ingeniería.</p>
         <p class="reveal" data-i18n="about_p2">Trabajamos en equipos reducidos, con comunicación directa y sin intermediarios. Cada proyecto lo tratamos como si fuera nuestro, porque mientras dura, lo es.</p>
         <figure class="about-photo reveal">
-          <img src="https://picsum.photos/seed/naitre-studio/800/600" alt="El espacio de trabajo del estudio" loading="lazy" width="800" height="600">
+          <img src="brand/studio.png" alt="El espacio de trabajo del estudio" loading="lazy" width="800" height="600">
         </figure>
       </div>
       <ul class="pillars">
