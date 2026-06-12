@@ -10,274 +10,315 @@ const aiCards = [
   { id:'ai6', feature:false, tint:true  },
 ];
 
-/* -------- i18n -------- */
-let lang = 'es';
-function setLang(l){
-  lang = l;
-  document.documentElement.lang = l;
-  document.title = i18n[l].doc_title;
-  const md = document.querySelector('meta[name="description"]');
-  if(md) md.setAttribute('content', i18n[l].doc_desc);
-  const be = document.getElementById('btn-es'), bn = document.getElementById('btn-en');
-  be.classList.toggle('active', l==='es'); be.setAttribute('aria-pressed', String(l==='es'));
-  bn.classList.toggle('active', l==='en'); bn.setAttribute('aria-pressed', String(l==='en'));
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
+/* -------- state (inmutable, unidireccional) -------- */
+const createState = () => ({
+  lang: 'es',
+  svc:  { current: null, returnFocus: null },
+  chat: { history: [], opened: false, busy: false },
+});
+
+const transition = (state, action) => {
+  switch(action.type){
+    case 'SET_LANG':
+      return { ...state, lang: action.lang };
+    case 'OPEN_SVC':
+      return { ...state, svc: { current: action.id, returnFocus: document.activeElement } };
+    case 'CLOSE_SVC':
+      return { ...state, svc: { current: null, returnFocus: state.svc.returnFocus } };
+    case 'ADD_CHAT_MSG':
+      return { ...state, chat: { ...state.chat, history: [...state.chat.history, action.msg] } };
+    case 'SET_CHAT_BUSY':
+      return { ...state, chat: { ...state.chat, busy: action.busy } };
+    case 'SET_CHAT_OPENED':
+      return { ...state, chat: { ...state.chat, opened: action.opened } };
+    default:
+      return state;
+  }
+};
+
+/* -------- dom helpers -------- */
+const $ = id => document.getElementById(id);
+const $q = (sel, ctx) => (ctx || document).querySelector(sel);
+const $qa = (sel, ctx) => [...(ctx || document).querySelectorAll(sel)];
+const setAttr = (el, k, v) => { if(el) el.setAttribute(k, v); };
+const setText = (el, t) => { if(el) el.textContent = t; };
+
+const inertTargets = () =>
+  ['nav','main','footer','#chatFab','#chatPanel'].map(s => $q(s)).filter(Boolean);
+
+/* -------- pure helpers -------- */
+const svcPrefix = id => id.startsWith('ai') ? 'ai_label' : 'serv_label';
+const makeChatMsg = (role, content) => ({ role, content });
+const chatSubject = (name, lang) =>
+  (lang === 'en' ? 'New project: ' : 'Nuevo proyecto: ') + name;
+
+/* -------- dom sync (efectos laterales aislados) -------- */
+const syncAll = (state, prev) => {
+  syncLang(state);
+  if(state.svc.current !== (prev && prev.svc ? prev.svc.current : null)) syncModal(state);
+  if(state.chat.opened !== (prev && prev.chat ? prev.chat.opened : null)) syncChatPanel(state);
+};
+
+const syncLang = state => {
+  const t = i18n[state.lang];
+  document.documentElement.lang = state.lang;
+  document.title = t.doc_title;
+  const md = $q('meta[name="description"]');
+  if(md) md.setAttribute('content', t.doc_desc);
+
+  const be = $('btn-es'), bn = $('btn-en');
+  be.classList.toggle('active', state.lang==='es');
+  be.setAttribute('aria-pressed', String(state.lang==='es'));
+  bn.classList.toggle('active', state.lang==='en');
+  bn.setAttribute('aria-pressed', String(state.lang==='en'));
+
+  $qa('[data-i18n]').forEach(el => {
     const k = el.getAttribute('data-i18n');
-    if(k && i18n[l][k]) el.textContent = i18n[l][k];
+    if(k && t[k]) el.textContent = t[k];
   });
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+  $qa('[data-i18n-html]').forEach(el => {
     const k = el.getAttribute('data-i18n-html');
-    if(k && i18n[l][k]) el.innerHTML = i18n[l][k];
+    if(k && t[k]) el.innerHTML = t[k];
   });
-  const ci = document.getElementById('chatInput');
-  if(ci){ ci.placeholder = i18n[l].chat_ph; ci.setAttribute('aria-label', i18n[l].chat_ph); }
-  const ap = document.querySelector('.about-photo img');
-  if(ap) ap.setAttribute('alt', i18n[l].about_photo_alt);
-  const t = i18n[l];
-  document.querySelector('nav').setAttribute('aria-label', t.nav_aria);
-  document.getElementById('menuBtn').setAttribute('aria-label', t.menu_label);
-  document.getElementById('svcClose').setAttribute('aria-label', t.close_label);
-  document.getElementById('chatClose').setAttribute('aria-label', t.close_label);
-  document.getElementById('chatSend').setAttribute('aria-label', t.chat_send);
-  document.getElementById('chatFab').setAttribute('aria-label', t.chat_open);
-  document.getElementById('chatPanel').setAttribute('aria-label', t.chat_title);
-  if(typeof svcCurrent === 'string' && svcCurrent) fillSvc(svcCurrent);
-}
 
-/* -------- form -------- */
-function sendMail(e){
-  e.preventDefault();
-  const name = document.getElementById('f-name').value;
-  const email = document.getElementById('f-email').value;
-  const msg = document.getElementById('f-msg').value;
-  const subject = encodeURIComponent(lang==='es' ? 'Nuevo proyecto: '+name : 'New project: '+name);
-  const body = encodeURIComponent(msg+'\n\n- '+name+' ('+email+')');
-  window.location.href = 'mailto:hola@naitre.dev?subject='+subject+'&body='+body;
-  return false;
-}
+  const ci = $('chatInput');
+  if(ci){ ci.placeholder = t.chat_ph; ci.setAttribute('aria-label', t.chat_ph); }
+  const ap = $q('.about-photo img');
+  if(ap) ap.setAttribute('alt', t.about_photo_alt);
 
-/* -------- modal -------- */
-const svcModal = document.getElementById('svcModal');
-let svcCurrent = null;
-function fillSvc(id){
-  document.getElementById('svcLabel').textContent = i18n[lang][id.startsWith('ai') ? 'ai_label' : 'serv_label'];
-  document.getElementById('svcTitle').textContent = i18n[lang][id+'_t'];
-  document.getElementById('svcBody').innerHTML = i18n[lang][id+'_long'] || '';
-  document.getElementById('svcCta').textContent = i18n[lang].modal_cta;
-}
-let svcReturnFocus = null;
-const inertTargets = ()=>['nav','main','footer','#chatFab','#chatPanel']
-  .map(s=>document.querySelector(s)).filter(Boolean);
-function openSvc(id){
-  svcCurrent = id; fillSvc(id);
-  svcReturnFocus = document.activeElement;
-  svcModal.classList.add('open');
+  $q('nav').setAttribute('aria-label', t.nav_aria);
+  $('menuBtn').setAttribute('aria-label', t.menu_label);
+  $('svcClose').setAttribute('aria-label', t.close_label);
+  $('chatClose').setAttribute('aria-label', t.close_label);
+  $('chatSend').setAttribute('aria-label', t.chat_send);
+  $('chatFab').setAttribute('aria-label', t.chat_open);
+  $('chatPanel').setAttribute('aria-label', t.chat_title);
+
+  if(state.svc.current) syncModalContent(state.svc.current, state.lang);
+};
+
+const syncModal = state => {
+  const { current, returnFocus } = state.svc;
+  const m = $('svcModal');
+  if(!current){
+    m.classList.remove('open');
+    document.body.style.overflow = '';
+    inertTargets().forEach(el => { el.inert = false; });
+    if(returnFocus && returnFocus.focus) returnFocus.focus();
+    return;
+  }
+  syncModalContent(current, state.lang);
+  m.classList.add('open');
   document.body.style.overflow = 'hidden';
-  inertTargets().forEach(el=>{ el.inert = true; });
-  document.getElementById('svcClose').focus();
-}
-function closeSvc(){
-  if(!svcCurrent) return;
-  svcCurrent = null;
-  svcModal.classList.remove('open');
-  document.body.style.overflow = '';
-  inertTargets().forEach(el=>{ el.inert = false; });
-  if(svcReturnFocus && svcReturnFocus.focus){ svcReturnFocus.focus(); }
-  svcReturnFocus = null;
-}
+  inertTargets().forEach(el => { el.inert = true; });
+  $('svcClose').focus();
+};
 
-/* -------- chat -------- */
-const chatPanel = document.getElementById('chatPanel');
-const chatBody  = document.getElementById('chatBody');
-const chatInput = document.getElementById('chatInput');
-const chatSend  = document.getElementById('chatSend');
-let chatHistory = [];
-let chatOpened = false, chatBusy = false;
+const syncModalContent = (id, lang) => {
+  $('svcLabel').textContent = i18n[lang][svcPrefix(id)];
+  $('svcTitle').textContent = i18n[lang][id+'_t'];
+  $('svcBody').innerHTML = i18n[lang][id+'_long'] || '';
+  $('svcCta').textContent = i18n[lang].modal_cta;
+};
 
-function addMsg(role, text){
+const syncChatPanel = state => {
+  const { opened } = state.chat;
+  const panel = $('chatPanel');
+  const fab = $('chatFab');
+  panel.classList.toggle('open', opened);
+  fab.classList.toggle('open', opened);
+  fab.setAttribute('aria-expanded', String(opened));
+};
+
+/* -------- template rendering -------- */
+const makeCardInteractive = (el, id) => {
+  const cb = () => dispatch({ type:'OPEN_SVC', id });
+  setAttr(el, 'role', 'button');
+  setAttr(el, 'tabindex', '0');
+  setAttr(el, 'aria-labelledby', id+'-title');
+  setAttr(el, 'aria-describedby', id+'-desc');
+  setAttr(el, 'aria-haspopup', 'dialog');
+  el.addEventListener('click', cb);
+  el.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); cb(); }
+  });
+};
+
+const renderServices = lang => {
+  const list = $q('.services-list');
+  const tpl = $('tpl-service');
+  if(!list || !tpl) return;
+  serviceIds.forEach(id => {
+    const div = tpl.content.cloneNode(true).querySelector('.service');
+    const h3 = div.querySelector('h3'), p = div.querySelector('p'), m = div.querySelector('.more');
+    setAttr(h3, 'data-i18n', id+'_t'); setText(h3, i18n[lang][id+'_t']);
+    setAttr(p, 'data-i18n', id+'_d');  setText(p, i18n[lang][id+'_d']);
+    setAttr(m, 'data-i18n', 'more_label'); setText(m, i18n[lang].more_label);
+    h3.id = id+'-title'; p.id = id+'-desc';
+    makeCardInteractive(div, id);
+    list.appendChild(div);
+  });
+};
+
+const renderAiCards = lang => {
+  const grid = $q('.ai-grid');
+  const tplCard = $('tpl-ai-card'), tplFeat = $('tpl-ai-card-feature');
+  if(!grid || !tplCard || !tplFeat) return;
+  aiCards.forEach(item => {
+    const tpl = item.feature ? tplFeat : tplCard;
+    const div = tpl.content.cloneNode(true).querySelector('.ai-card');
+    const h3 = div.querySelector('h3'), p = div.querySelector('p'), m = div.querySelector('.more');
+    setAttr(h3, 'data-i18n', item.id+'_t'); setText(h3, i18n[lang][item.id+'_t']);
+    setAttr(p, 'data-i18n', item.id+'_d');  setText(p, i18n[lang][item.id+'_d']);
+    setAttr(m, 'data-i18n', 'more_label'); setText(m, i18n[lang].more_label);
+    if(item.tint) div.classList.add('ai-card--tint');
+    if(item.feature){
+      const img = div.querySelector('img');
+      if(img){ img.src = item.img; img.alt = item.alt || ''; }
+    }
+    h3.id = item.id+'-title'; p.id = item.id+'-desc';
+    makeCardInteractive(div, item.id);
+    grid.appendChild(div);
+  });
+};
+
+/* -------- dom builders (chat) -------- */
+const addMsgEl = (role, text) => {
   const el = document.createElement('div');
   el.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
   el.textContent = text;
-  chatBody.appendChild(el);
-  chatBody.scrollTop = chatBody.scrollHeight;
-  return el;
-}
-function addTyping(){
+  const body = $('chatBody');
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
+};
+
+const addTypingEl = () => {
   const el = document.createElement('div');
   el.className = 'msg bot typing';
   el.setAttribute('aria-hidden','true');
   el.innerHTML = '<span></span><span></span><span></span>';
-  chatBody.appendChild(el);
-  chatBody.scrollTop = chatBody.scrollHeight;
+  const body = $('chatBody');
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
   return el;
-}
-function toggleChat(open){
-  chatPanel.classList.toggle('open', open);
-  const fab = document.getElementById('chatFab');
-  fab.classList.toggle('open', open);
-  fab.setAttribute('aria-expanded', String(open));
-  if(open && !chatOpened){
-    chatOpened = true;
-    addMsg('assistant', i18n[lang].chat_hello);
+};
+
+/* -------- store (único punto de mutación) -------- */
+let state = createState();
+let prevState = null;
+
+const dispatch = action => {
+  prevState = state;
+  state = transition(state, action);
+  syncAll(state, prevState);
+};
+
+window.setLang = l => dispatch({ type:'SET_LANG', lang:l });
+
+/* -------- event handlers -------- */
+const sendMail = e => {
+  e.preventDefault();
+  const name = $('f-name').value;
+  const email = $('f-email').value;
+  const msg = $('f-msg').value;
+  window.location.href = 'mailto:hola@naitre.dev?' +
+    'subject=' + encodeURIComponent(chatSubject(name, state.lang)) +
+    '&body='  + encodeURIComponent(msg + '\n\n- ' + name + ' (' + email + ')');
+};
+
+const handleEscape = e => {
+  if(e.key !== 'Escape') return;
+  if(state.svc.current){ dispatch({ type:'CLOSE_SVC' }); }
+  else if(state.chat.opened){ dispatch({ type:'SET_CHAT_OPENED', opened:false }); $('chatFab').focus(); }
+  else if($('navLinks').classList.contains('open')){ navMenuClose(); $('menuBtn').focus(); }
+};
+
+const navMenuClose = () => {
+  const links = $('navLinks');
+  links.classList.remove('open');
+  $('menuBtn').setAttribute('aria-expanded','false');
+};
+
+const toggleChat = (open) => {
+  const next = open !== undefined ? open : !state.chat.opened;
+  if(next === state.chat.opened) return;
+  if(next && !state.chat.opened && state.chat.history.length === 0){
+    const hello = i18n[state.lang].chat_hello;
+    addMsgEl('assistant', hello);
+    dispatch({ type:'ADD_CHAT_MSG', msg:makeChatMsg('assistant', hello) });
   }
-  if(open) chatInput.focus();
-}
-async function sendChat(){
-  const text = chatInput.value.trim();
-  if(!text || chatBusy) return;
-  chatInput.value = '';
-  addMsg('user', text);
-  chatHistory.push({role:'user', content:text});
-  chatBusy = true; chatSend.disabled = true;
-  const typing = addTyping();
+  dispatch({ type:'SET_CHAT_OPENED', opened:next });
+  if(next) $('chatInput').focus();
+};
+
+const sendChat = async () => {
+  const input = $('chatInput');
+  const text = input.value.trim();
+  if(!text || state.chat.busy) return;
+  input.value = '';
+  addMsgEl('user', text);
+  dispatch({ type:'ADD_CHAT_MSG', msg:makeChatMsg('user', text) });
+  dispatch({ type:'SET_CHAT_BUSY', busy:true });
+  const typing = addTypingEl();
   try{
     const r = await fetch('/api/chat', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({messages: chatHistory.slice(-12), lang})
+      body: JSON.stringify({ messages: state.chat.history.slice(-12), lang: state.lang })
     });
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
     typing.remove();
-    const reply = data.reply || i18n[lang].chat_error;
-    addMsg('assistant', reply);
-    chatHistory.push({role:'assistant', content:reply});
+    const data = r.ok ? await r.json() : {};
+    const reply = data.reply || i18n[state.lang].chat_error;
+    addMsgEl('assistant', reply);
+    dispatch({ type:'ADD_CHAT_MSG', msg:makeChatMsg('assistant', reply) });
   }catch(err){
     typing.remove();
-    addMsg('assistant', i18n[lang].chat_error);
+    addMsgEl('assistant', i18n[state.lang].chat_error);
   }finally{
-    chatBusy = false; chatSend.disabled = false; chatInput.focus();
+    dispatch({ type:'SET_CHAT_BUSY', busy:false });
+    $('chatInput').focus();
   }
-}
-
-/* -------- mobile menu -------- */
-const menuBtn = document.getElementById('menuBtn');
-const navLinks = document.getElementById('navLinks');
-function closeMenu(){
-  navLinks.classList.remove('open');
-  menuBtn.setAttribute('aria-expanded','false');
-}
-
-/* -------- reveal observer -------- */
-function initReveal(){
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target);} });
-  },{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-}
-
-/* -------- template rendering -------- */
-function renderServices(){
-  const list = document.querySelector('.services-list');
-  if(!list) return;
-  const tpl = document.getElementById('tpl-service');
-  if(!tpl) return;
-  serviceIds.forEach(id => {
-    const clone = tpl.content.cloneNode(true);
-    const div = clone.querySelector('.service');
-    const h3 = div.querySelector('h3');
-    const p  = div.querySelector('p');
-    const more = div.querySelector('.more');
-    h3.setAttribute('data-i18n', id+'_t');
-    h3.textContent = i18n[lang][id+'_t'];
-    p.setAttribute('data-i18n', id+'_d');
-    p.textContent = i18n[lang][id+'_d'];
-    more.setAttribute('data-i18n', 'more_label');
-    more.textContent = i18n[lang].more_label;
-    h3.id = id + '-title';
-    p.id = id + '-desc';
-    div.setAttribute('role','button');
-    div.setAttribute('tabindex','0');
-    div.setAttribute('aria-labelledby', h3.id);
-    div.setAttribute('aria-describedby', p.id);
-    div.setAttribute('aria-haspopup','dialog');
-    div.addEventListener('click', ()=>openSvc(id));
-    div.addEventListener('keydown', e=>{
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openSvc(id); }
-    });
-    list.appendChild(clone);
-  });
-}
-
-function renderAiCards(){
-  const grid = document.querySelector('.ai-grid');
-  if(!grid) return;
-  const tplCard = document.getElementById('tpl-ai-card');
-  const tplFeat = document.getElementById('tpl-ai-card-feature');
-  if(!tplCard || !tplFeat) return;
-  aiCards.forEach(item => {
-    const tpl = item.feature ? tplFeat : tplCard;
-    const clone = tpl.content.cloneNode(true);
-    const div = clone.querySelector('.ai-card');
-    const h3 = div.querySelector('h3');
-    const p  = div.querySelector('p');
-    const more = div.querySelector('.more');
-    h3.setAttribute('data-i18n', item.id+'_t');
-    h3.textContent = i18n[lang][item.id+'_t'];
-    p.setAttribute('data-i18n', item.id+'_d');
-    p.textContent = i18n[lang][item.id+'_d'];
-    more.setAttribute('data-i18n', 'more_label');
-    more.textContent = i18n[lang].more_label;
-    if(item.tint) div.classList.add('ai-card--tint');
-    if(item.feature){
-      const img = div.querySelector('img');
-      if(img){
-        img.src = item.img;
-        img.alt = item.alt || '';
-      }
-    }
-    h3.id = item.id + '-title';
-    p.id = item.id + '-desc';
-    div.setAttribute('role','button');
-    div.setAttribute('tabindex','0');
-    div.setAttribute('aria-labelledby', h3.id);
-    div.setAttribute('aria-describedby', p.id);
-    div.setAttribute('aria-haspopup','dialog');
-    div.addEventListener('click', ()=>openSvc(item.id));
-    div.addEventListener('keydown', e=>{
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openSvc(item.id); }
-    });
-    grid.appendChild(clone);
-  });
-}
+};
 
 /* -------- init -------- */
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderServices();
-  renderAiCards();
+document.addEventListener('DOMContentLoaded', () => {
+  const lang = $q('html').getAttribute('lang') || 'es';
+  renderServices(lang);
+  renderAiCards(lang);
+  dispatch({ type:'SET_LANG', lang });
 
-  setLang(document.documentElement.lang || 'es');
-
-  /* modal events */
-  svcModal.addEventListener('keydown', e=>{
+  /* modal */
+  $('svcModal').addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = svcModal.querySelectorAll('button, a[href]');
+    const f = $qa('button, a[href]', $('svcModal'));
     const first = f[0], last = f[f.length-1];
     if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
     else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
   });
-  document.getElementById('svcBackdrop').addEventListener('click', closeSvc);
-  document.getElementById('svcClose').addEventListener('click', closeSvc);
-  document.getElementById('svcCta').addEventListener('click', closeSvc);
-  document.addEventListener('keydown', e=>{
-    if(e.key !== 'Escape') return;
-    if(svcCurrent){ closeSvc(); return; }
-    if(chatPanel.classList.contains('open')){ toggleChat(false); document.getElementById('chatFab').focus(); return; }
-    if(navLinks.classList.contains('open')){ closeMenu(); menuBtn.focus(); }
+  $('svcBackdrop').addEventListener('click', () => dispatch({ type:'CLOSE_SVC' }));
+  $('svcClose').addEventListener('click', () => dispatch({ type:'CLOSE_SVC' }));
+  $('svcCta').addEventListener('click', () => dispatch({ type:'CLOSE_SVC' }));
+  document.addEventListener('keydown', handleEscape);
+
+  /* chat */
+  $('chatFab').addEventListener('click', () => toggleChat());
+  $('chatClose').addEventListener('click', () => toggleChat(false));
+  $('chatSend').addEventListener('click', sendChat);
+  $('chatInput').addEventListener('keydown', e => { if(e.key==='Enter') sendChat(); });
+
+  /* menu */
+  $('menuBtn').addEventListener('click', () => {
+    const links = $('navLinks');
+    links.classList.toggle('open');
+    $('menuBtn').setAttribute('aria-expanded', String(links.classList.contains('open')));
   });
+  $qa('#navLinks a').forEach(a => a.addEventListener('click', navMenuClose));
 
-  /* chat events */
-  document.getElementById('chatFab').addEventListener('click', ()=>toggleChat(!chatPanel.classList.contains('open')));
-  document.getElementById('chatClose').addEventListener('click', ()=>toggleChat(false));
-  chatSend.addEventListener('click', sendChat);
-  chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter') sendChat(); });
-
-  /* menu events */
-  menuBtn.addEventListener('click', ()=>{
-    const open = navLinks.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', String(open));
-  });
-  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
-
-  initReveal();
+  /* reveal */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
+    });
+  }, { threshold:.12 });
+  $qa('.reveal').forEach(el => obs.observe(el));
 });
