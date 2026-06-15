@@ -300,6 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
   $('svcCta').addEventListener('click', () => dispatch({ type:'CLOSE_SVC' }));
   document.addEventListener('keydown', handleEscape);
 
+  /* chat — keyboard avoidance (mobile) */
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', () => {
+      if(!state.chat.opened) return;
+      $('chatBody').scrollTop = $('chatBody').scrollHeight;
+    });
+  }
+
   /* chat */
   $('chatFab').addEventListener('click', () => toggleChat());
   $('chatClose').addEventListener('click', () => toggleChat(false));
