@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "naitre-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "--listen", "4200", "--no-request-logging"],
+      "port": 4200
+    }
+  ]
+}

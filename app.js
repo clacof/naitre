@@ -57,6 +57,7 @@ const syncAll = (state, prev) => {
   syncLang(state);
   if(state.svc.current !== (prev && prev.svc ? prev.svc.current : null)) syncModal(state);
   if(state.chat.opened !== (prev && prev.chat ? prev.chat.opened : null)) syncChatPanel(state);
+  if(state.chat.busy !== (prev && prev.chat ? prev.chat.busy : false)) syncChatBusy(state);
 };
 
 const syncLang = state => {
@@ -128,6 +129,13 @@ const syncChatPanel = state => {
   panel.classList.toggle('open', opened);
   fab.classList.toggle('open', opened);
   fab.setAttribute('aria-expanded', String(opened));
+};
+
+const syncChatBusy = state => {
+  const btn = $('chatSend');
+  const inp = $('chatInput');
+  if(btn) { btn.disabled = state.chat.busy; btn.setAttribute('aria-busy', String(state.chat.busy)); }
+  if(inp) inp.disabled = state.chat.busy;
 };
 
 /* -------- template rendering -------- */
