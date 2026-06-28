@@ -714,34 +714,42 @@
   }
   .chat-input button:hover{background:var(--accent-ink)}
   .chat-input button:disabled{background:var(--line);cursor:default}
-  /* Mobile immersive — medium screens */
+  /* Mobile — full-screen takeover (≤680px) */
   @media(max-width:680px){
     .chat-panel{
-      left:0;right:0;bottom:0;
-      width:100%;height:calc(100dvh - 80px);
-      border-radius:16px 16px 0 0;border-bottom:none;
+      inset:0;
+      width:100%;height:100dvh;
+      border-radius:0;border:none;
     }
-    .chat-head{padding:12px 16px}
+    .chat-head{
+      padding:12px 16px;
+      padding-top:calc(12px + env(safe-area-inset-top,0px));
+    }
     .chat-body{padding:14px 16px}
-    .chat-input{padding:10px 14px}
-    .chat-fab{bottom:max(20px,env(safe-area-inset-bottom,20px));right:14px}
-  }
-  /* Mobile immersive — small screens (full‑screen takeover) */
-  @media(max-width:480px){
-    .chat-panel{
-      height:100dvh;border-radius:0;border:none;
+    .chat-input{
+      padding:10px 14px;
+      padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));
     }
-    .chat-head{padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+    .chat-fab{
+      right:18px;
+      bottom:max(20px,env(safe-area-inset-bottom,20px));
+    }
+    /* El panel ocupa toda la pantalla y se cierra con la X de la cabecera:
+       el FAB sobra cuando está abierto (su "X" flotante tapaba el input). */
+    .chat-fab.open{display:none}
+    /* Botón de cierre de la cabecera con área táctil cómoda */
+    .chat-head .close{padding:10px;margin-right:-6px}
+    .chat-head .close svg{width:18px;height:18px}
+  }
+  /* Mobile — ajustes tipográficos en pantallas pequeñas */
+  @media(max-width:480px){
     .chat-head .t{font-size:.9rem}
     .chat-head .s{font-size:.65rem}
-    .chat-body{padding:12px 14px}
-    .chat-input{padding:8px 12px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
     .msg{font-size:.85rem;padding:10px 13px}
   }
   /* Fallback for browsers without dvh support */
   @supports not (height: 1dvh){
-    @media(max-width:680px){.chat-panel{height:calc(100vh - 80px)}}
-    @media(max-width:480px){.chat-panel{height:100vh}}
+    @media(max-width:680px){.chat-panel{height:100vh}}
   }
 
   /* ---------- Reveal animation (stagger) ---------- */
