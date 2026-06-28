@@ -94,6 +94,8 @@ const syncLang = state => {
   $('chatSend').setAttribute('aria-label', t.chat_send);
   $('chatFab').setAttribute('aria-label', t.chat_open);
   $('chatPanel').setAttribute('aria-label', t.chat_title);
+  const proc = $('proceso');
+  if(proc && t.proc_region) proc.setAttribute('aria-label', t.proc_region);
 
   if(state.svc.current) syncModalContent(state.svc.current, state.lang);
 };
@@ -330,11 +332,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   $qa('#navLinks a').forEach(a => a.addEventListener('click', navMenuClose));
 
-  /* reveal */
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
-    });
-  }, { threshold:.12 });
-  $qa('.reveal').forEach(el => obs.observe(el));
+  /* reveal — si el navegador soporta animaciones scroll-driven nativas (view()),
+     las lleva el CSS (hilo del compositor) y no observamos nada. Si no, fallback
+     con IntersectionObserver que añade .visible. */
+  const cssScrollDriven = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline','view()'));
+  if(!cssScrollDriven){
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }
+      });
+    }, { threshold:0, rootMargin:'0px 0px -10% 0px' });
+    $qa('.reveal').forEach(el => obs.observe(el));
+  }
 });

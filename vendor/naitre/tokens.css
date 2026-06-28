@@ -1,0 +1,56 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --nai-color-bg: #f5f6f7; /** Fondo de página. Dark: #14161a */
+  --nai-color-surface: #ffffff; /** Superficies elevadas (modales, tarjetas). Dark: #1b1e24 */
+  --nai-color-soft: #e9ecef; /** Superficie secundaria (hover, inputs). Dark: #23272e */
+  --nai-color-ink: #181b20; /** Texto principal. Dark: #e9eaec */
+  --nai-color-muted: #5b6370; /** Texto secundario / subtítulos. Dark: #9aa1ac */
+  --nai-color-line: #dfe3e8; /** Bordes y separadores. Dark: #2a2e36 */
+  --nai-color-accent: #c96342; /** Terracota — acento único, CTAs. Escaso y precioso. Dark: #d4714f */
+  --nai-color-accent-ink: #a04527; /** Terracota oscuro (hover de botones). Dark: #df8a6b */
+  --nai-color-ai-bg: #181b20; /** Fondo sección IA (siempre oscuro). Dark: #181c22 */
+  --nai-color-ai-card: #1d2127; /** Tarjetas internas de la sección IA. Dark: #1e232a */
+  --nai-space-0: 0;
+  --nai-space-1: 4px;
+  --nai-space-2: 8px;
+  --nai-space-3: 12px;
+  --nai-space-4: 16px;
+  --nai-space-5: 20px;
+  --nai-space-6: 24px;
+  --nai-space-8: 32px;
+  --nai-space-10: 40px;
+  --nai-space-12: 48px;
+  --nai-space-16: 64px;
+  --nai-radius-sm: 8px;
+  --nai-radius-md: 10px;
+  --nai-radius-lg: 14px;
+  --nai-radius-xl: 18px;
+  --nai-radius-pill: 999px;
+  --nai-font-family-sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --nai-font-weight-regular: 400;
+  --nai-font-weight-medium: 500;
+  --nai-font-weight-semibold: 600;
+  --nai-font-size-micro: 11px;
+  --nai-font-size-caption: 13px;
+  --nai-font-size-body: 16px;
+  --nai-font-size-heading: 24px;
+  --nai-font-size-display: 40px;
+  --nai-shadow-sm: 0 1px 2px rgba(24, 27, 32, 0.06); /** Elevación mínima (inputs, tags). Dark: más opaca. */
+  --nai-shadow-md: 0 4px 16px rgba(24, 27, 32, 0.10); /** Elevación media (menús, tarjetas flotantes, toasts). */
+  --nai-shadow-lg: 0 12px 32px rgba(24, 27, 32, 0.16); /** Elevación alta (modales, popovers grandes). */
+  --nai-duration-fast: 120ms; /** Micro-interacciones (hover, focus). */
+  --nai-duration-base: 200ms; /** Transiciones estándar (apertura de menús, toasts). */
+  --nai-duration-slow: 320ms; /** Entradas grandes (modales, drawers). */
+  --nai-ease-standard: cubic-bezier(0.2, 0, 0, 1); /** Curva por defecto, calma y precisa. */
+  --nai-ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1); /** Para movimientos con más presencia. */
+  --nai-layer-base: 0; /** Plano del documento. */
+  --nai-layer-dropdown: 1000; /** Menús y popovers. */
+  --nai-layer-sticky: 1100; /** Cabeceras/barras fijas. */
+  --nai-layer-overlay: 1200; /** Backdrop de modales/drawers. */
+  --nai-layer-modal: 1300; /** Contenido de modales/drawers. */
+  --nai-layer-toast: 1400; /** Notificaciones. */
+  --nai-layer-tooltip: 1500; /** Tooltips — siempre por encima. */
+}

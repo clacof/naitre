@@ -1,0 +1,19 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-theme="dark"] {
+  --nai-color-bg: #14161a;
+  --nai-color-surface: #1b1e24;
+  --nai-color-soft: #23272e;
+  --nai-color-ink: #e9eaec;
+  --nai-color-muted: #9aa1ac;
+  --nai-color-line: #2a2e36;
+  --nai-color-accent: #d4714f;
+  --nai-color-accent-ink: #df8a6b;
+  --nai-color-ai-bg: #181c22;
+  --nai-color-ai-card: #1e232a;
+  --nai-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --nai-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.50);
+  --nai-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.60);
+}
