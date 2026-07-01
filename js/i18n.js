@@ -1,4 +1,4 @@
-const i18n = {
+export const i18n = {
   es: {
     doc_title:"naitre · Estudio de desarrollo de software",
     doc_desc:"naitre, estudio de desarrollo de software. IA, webs, apps móviles, IoT y software a medida. Donde las ideas nacen.",
@@ -52,7 +52,10 @@ const i18n = {
     contact_title:"¿Tienes una idea? Hagámosla nacer.",
     contact_intro:"Cuéntanos qué quieres construir y te responderemos en menos de 48 horas.",
     f_name:"Nombre", f_email:"Email", f_msg:"Cuéntanos tu proyecto", f_send:"Enviar",
-    f_note:"El formulario abrirá tu cliente de correo con el mensaje listo para enviar.",
+    f_note:"Te responderemos por correo en menos de 48 horas.",
+    f_sending:"Enviando…",
+    f_sent:"¡Gracias! Hemos recibido tu mensaje y te responderemos pronto.",
+    f_error:"No se pudo enviar. Inténtalo de nuevo o escríbenos a hola@naitre.dev.",
     footer:"© 2026 naitre · estudio de desarrollo de software",
     chat_title:"asistente de naitre",
     chat_status:"respuestas generadas por IA",
@@ -127,7 +130,10 @@ const i18n = {
     contact_title:"Have an idea? Let's bring it to life.",
     contact_intro:"Tell us what you want to build and we'll get back to you within 48 hours.",
     f_name:"Name", f_email:"Email", f_msg:"Tell us about your project", f_send:"Send",
-    f_note:"The form will open your email client with the message ready to send.",
+    f_note:"We'll get back to you by email within 48 hours.",
+    f_sending:"Sending…",
+    f_sent:"Thanks! We've received your message and will reply soon.",
+    f_error:"Couldn't send. Try again or email us at hola@naitre.dev.",
     footer:"© 2026 naitre · software development studio",
     chat_title:"naitre assistant",
     chat_status:"AI-generated replies",

@@ -6,7 +6,7 @@ Documentación para agentes de Claude Code. Lee esto antes de tocar cualquier ar
 
 **Naître** es el sitio web de la consultora de inteligencia artificial *Naître Studio*. Landing page de una sola página (vanilla JS + HTML), desplegada en Vercel.
 
-Stack: HTML · CSS (custom properties) · JavaScript ESM vanilla · sin bundler · i18n propio (`i18n.js`)
+Stack: HTML · CSS (custom properties) · JavaScript ESM vanilla · sin bundler · i18n propio (`js/i18n.js`)
 
 ---
 
@@ -29,9 +29,31 @@ npm install
 
 ```
 /
-├── index.html          # Única página — todo el HTML + CSS inline
-├── app.js              # Lógica completa: estado, eventos, API chat
-├── i18n.js             # Diccionario ES/EN — todas las cadenas de UI
+├── index.html          # Única página — solo HTML (~280 líneas)
+│                        # Enlaza css/styles.css + vendor/naitre/tokens.css
+│                        # Carga un único <script type="module" src="js/main.js">
+├── css/
+│   └── styles.css      # Todo el CSS de la página (extraído del <style> inline)
+├── js/                 # Código fuente en módulos ESM
+│   ├── main.js         # Entry point: orquesta initApp() y luego initScroll()
+│   ├── app.js          # Composición: store + render + chat + cableado de eventos
+│   ├── store.js        # Estado inmutable: createState, transition, createStore
+│   ├── sync.js         # Reconciliación DOM (efectos aislados por slice de estado)
+│   ├── render.js       # Render de tarjetas/servicios desde <template>
+│   ├── chat.js         # createChat(store): UI y flujo del chat (fetch /api/chat)
+│   ├── dom.js          # Helpers DOM ($ , $q, $qa, setAttr, setText, inertTargets)
+│   ├── pure.js         # Helpers puros (svcPrefix, makeChatMsg, chatSubject)
+│   ├── i18n.js         # Diccionario ES/EN — export const i18n
+│   └── scroll/         # Motor de scrollytelling (vanilla, sin deps)
+│       ├── index.js    # initScroll(): crea el SceneEngine y enchufa los actos
+│       ├── engine.js   # createSceneEngine(): progreso por escena anclada + rAF
+│       ├── utils.js    # clamp, lerp, easeInOut, easeOut, hexA, reduceMotion
+│       ├── hero.js     # Acto I: campo de partículas (canvas)
+│       ├── sections.js # Actos II–V: transiciones de sección por scroll
+│       ├── hscroll.js  # Proceso: pin + scroll horizontal
+│       ├── rail.js     # Riel de progreso lateral
+│       ├── magnetic.js # Botones magnéticos
+│       └── tilt.js     # Tarjetas IA con tilt 3D
 ├── brand/
 │   ├── logo.svg        # Logo principal (crema sobre fondo oscuro)
 │   ├── logo-dark.svg   # Logo para fondos claros
@@ -48,7 +70,7 @@ npm install
 
 ## Design system: Première Lumière
 
-Paleta definida como CSS custom properties en `index.html` (`<style>` en `<head>`). Hay versión light y dark (via `@media prefers-color-scheme: dark`):
+Paleta definida como CSS custom properties en `vendor/naitre/tokens.css`; el resto de estilos en `css/styles.css`. Hay versión light y dark (via `@media prefers-color-scheme: dark`):
 
 | Variable | Light | Dark | Uso |
 |---|---|---|---|
@@ -72,11 +94,14 @@ Manifiesto completo en `brand/design-philosophy.md`.
 
 ## Estado y arquitectura JS
 
-`app.js` implementa un mini store unidireccional al estilo Redux:
+`js/store.js` implementa un mini store unidireccional al estilo Redux. Estilo **funcional**: reductor puro + fábrica con estado encapsulado (sin globals). `js/app.js` lo compone con el efecto `syncAll`:
 
 ```js
-// Estado inmutable — solo se modifica via dispatch()
+// store.js — estado inmutable, solo se modifica via dispatch()
 state = { lang, svc: { current, returnFocus }, chat: { history, opened, busy } }
+
+const store = createStore(syncAll);   // onChange(state, prev) tras cada acción
+const { getState, dispatch } = store;
 
 dispatch({ type: 'SET_LANG', lang: 'en' })
 dispatch({ type: 'OPEN_SVC', id: 's1' })
@@ -85,22 +110,24 @@ dispatch({ type: 'SET_CHAT_BUSY', busy: false })
 dispatch({ type: 'ADD_CHAT_MSG', msg: { role: 'user', content: '...' } })
 ```
 
-- `syncAll(state, prev)` — reconcilia el DOM tras cada dispatch (NO mutar el DOM directamente)
-- `$('id')` — alias de `document.getElementById`
+- `transition(state, action)` (store.js) — reductor **puro**, nunca muta; devuelve estado nuevo
+- `syncAll(state, prev)` (sync.js) — reconcilia el DOM tras cada dispatch (NO mutar el DOM directamente)
+- `dispatch` se pasa por parámetro a render/chat: el origen de la mutación es único y explícito (sin `window.dispatch`)
+- `$('id')` (dom.js) — alias de `document.getElementById`
 - El chat se conecta a la API en `api/chat.js` via fetch POST
 
 ---
 
 ## Internacionalización
 
-Todas las cadenas visibles viven en `i18n.js`. Acceso directo por idioma y clave:
+Todas las cadenas visibles viven en `js/i18n.js`. Acceso directo por idioma y clave:
 
 ```js
 i18n[state.lang]['hero_title']   // string en idioma activo (guiones bajos, no puntos)
 i18n['en']['hero_title']         // forzar idioma
 ```
 
-**Regla**: nunca escribir texto hardcodeado en HTML o JS. Todo va en `i18n.js`.
+**Regla**: nunca escribir texto hardcodeado en HTML o JS. Todo va en `js/i18n.js`.
 
 ---
 
