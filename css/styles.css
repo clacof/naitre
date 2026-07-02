@@ -627,10 +627,8 @@
     60%{transform:scale(1.25);opacity:0}
     100%{transform:scale(1.25);opacity:0}
   }
-  .chat-fab.open::before{animation:none}
-  .chat-fab .icon-close{display:none}
-  .chat-fab.open .icon-close{display:block}
-  .chat-fab.open .icon-chat{display:none}
+  /* El panel se cierra con la X de la cabecera: el FAB desaparece al abrir */
+  .chat-fab.open{display:none}
   @media(prefers-reduced-motion:reduce){.chat-fab::before{animation:none}}
   .chat-panel{
     position:fixed;right:28px;bottom:104px;z-index:300;
@@ -652,6 +650,7 @@
     line-height:1;padding:12px;margin-right:-8px;
   }
   .chat-head .close:hover{color:#e9eaec}
+  .chat-head .close svg{width:18px;height:18px}
   .chat-body{
     flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;
   }
@@ -708,12 +707,10 @@
       right:18px;
       bottom:max(20px,env(safe-area-inset-bottom,20px));
     }
-    /* El panel ocupa toda la pantalla y se cierra con la X de la cabecera:
-       el FAB sobra cuando está abierto (su "X" flotante tapaba el input). */
-    .chat-fab.open{display:none}
     /* Botón de cierre de la cabecera con área táctil cómoda */
     .chat-head .close{padding:10px;margin-right:-6px}
-    .chat-head .close svg{width:18px;height:18px}
+    /* Con el chat a pantalla completa, la página de fondo no debe desplazarse */
+    body.chat-open{overflow:hidden}
   }
   /* Mobile — ajustes tipográficos en pantallas pequeñas */
   @media(max-width:480px){

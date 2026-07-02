@@ -72,13 +72,15 @@ export const syncModal = state => {
   $('svcClose').focus();
 };
 
-export const syncChatPanel = state => {
+export const syncChatPanel = (state, prev) => {
   const { opened } = state.chat;
   const panel = $('chatPanel');
   const fab = $('chatFab');
   panel.classList.toggle('open', opened);
   fab.classList.toggle('open', opened);
   fab.setAttribute('aria-expanded', String(opened));
+  document.body.classList.toggle('chat-open', opened);
+  if (!opened && prev && prev.chat && prev.chat.opened) fab.focus();
 };
 
 export const syncChatBusy = state => {
@@ -113,7 +115,7 @@ const prevForm = prev => (prev && prev.form ? prev.form.status : null);
 export const syncAll = (state, prev) => {
   syncLang(state);
   if (state.svc.current  !== prevSvc(prev))               syncModal(state);
-  if (state.chat.opened  !== prevChat(prev, 'opened', null)) syncChatPanel(state);
+  if (state.chat.opened  !== prevChat(prev, 'opened', null)) syncChatPanel(state, prev);
   if (state.chat.busy    !== prevChat(prev, 'busy', false))  syncChatBusy(state);
   if (state.form.status  !== prevForm(prev))              syncForm(state);
 };
