@@ -163,7 +163,7 @@
   .hero-stage{
     min-height:100vh;min-height:100dvh;
     display:flex;align-items:center;
-    position:relative;overflow:hidden;
+    position:relative;overflow:clip; /* clip, no hidden: no crea scroll container */
   }
   .hero-content{
     position:relative;z-index:2;
@@ -215,6 +215,14 @@
   .hero--active .hero-track{height:220vh}
   .hero--active .hero-stage{position:sticky;top:0;height:100vh;height:100dvh;min-height:0}
   .hero--active .hero-mark,.hero--active .hero-mark-sm{display:none}
+  /* La marginalia se dispersa con deriva propia al salir del acto (solo
+     transform: fade-soft con fill both retiene la opacidad, no la pisamos).
+     Solo desktop: en móvil el eyebrow es horizontal y sin transform. */
+  @media(min-width:761px){
+    .hero--active .hero-eyebrow{transform:rotate(180deg) translateY(calc(var(--hp,0) * 7vh))}
+    .hero--active .hero-coord{transform:translateY(calc(var(--hp,0) * 9vh))}
+    .hero--active .hero-fig{transform:translateY(calc(var(--hp,0) * -7vh))}
+  }
 
   /* ---------- Hero · entrada cinética ---------- */
   /* Los insets laterales/superior son negativos y generosos: la palabra
@@ -250,11 +258,23 @@
   }
   .scroll-rail .rl-track{
     position:relative;width:2px;height:42vh;
-    background:var(--line);border-radius:2px;overflow:hidden;
+    background:var(--line);border-radius:2px;
   }
+  /* Relleno por transform (scaleY), no height: sin layout por frame */
   .scroll-rail .rl-fill{
-    position:absolute;left:0;top:0;width:100%;height:0;
+    position:absolute;left:0;top:0;width:100%;height:100%;
     background:linear-gradient(var(--accent),var(--accent-ink));border-radius:2px;
+    transform:scaleY(0);transform-origin:top;will-change:transform;
+  }
+  /* Marcadores de acto — cuaderno de laboratorio (los coloca scroll.js) */
+  .scroll-rail .rl-dot{
+    position:absolute;left:50%;width:5px;height:5px;border-radius:50%;
+    transform:translate(-50%,-50%);background:var(--line);
+    transition:background .3s,box-shadow .3s;
+  }
+  .scroll-rail .rl-dot.on{
+    background:var(--accent);
+    box-shadow:0 0 8px color-mix(in srgb,var(--accent) 60%,transparent);
   }
   .scroll-rail .rl-pct{
     font-size:.6rem;letter-spacing:.16em;color:var(--muted);
@@ -359,8 +379,17 @@
   /* ---------- AI featured (único bloque oscuro de la página) ---------- */
   .ai-section{
     background:var(--ai-bg);color:#e9eaec;
-    position:relative;overflow:hidden;
+    position:relative;overflow:clip;
   }
+  /* Carta astronómica de fondo: eco de la marca que gira suavemente con el
+     scroll (--vp lo escribe scroll.js; en móvil/reduce queda estática en 0°). */
+  .ai-section::after{
+    content:"";position:absolute;z-index:0;pointer-events:none;
+    right:-14vw;top:-16vw;width:56vw;height:56vw;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='none' stroke='rgba(233,234,236,0.11)' stroke-width='0.5' stroke-dasharray='0.7 3'/%3E%3Ccircle cx='50' cy='50' r='33' fill='none' stroke='rgba(233,234,236,0.07)' stroke-width='0.5'/%3E%3Cpath d='M50 4 A46 46 0 0 1 96 50' fill='none' stroke='rgba(201,99,66,0.3)' stroke-width='0.8' stroke-linecap='round'/%3E%3Ccircle cx='96' cy='50' r='1.4' fill='rgba(201,99,66,0.45)'/%3E%3C/svg%3E") center/contain no-repeat;
+    transform:rotate(calc((var(--vp,.5) - .5) * 70deg));
+  }
+  @media(max-width:760px){.ai-section::after{display:none}}
   .ai-section h2{color:#e9eaec;max-width:26ch}
   .ai-section .section-intro{color:var(--ai-muted)}
   .ai-badge{
@@ -468,7 +497,7 @@
   /* Activo: pin + desplazamiento lateral (lo añade scroll.js) */
   .hscroll--active .hscroll-track{height:260vh;position:relative}
   .hscroll--active .hscroll-viewport{
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+    position:sticky;top:0;height:100vh;height:100dvh;overflow:clip;
     display:flex;align-items:center;padding:0;
   }
   .hscroll--active .hscroll-row{
@@ -486,9 +515,30 @@
     border-radius:4px;overflow:hidden;
   }
   .hscroll--active .hscroll-progress span{
-    display:block;height:100%;width:0;
+    display:block;height:100%;width:100%;
     background:linear-gradient(90deg,var(--accent),var(--accent-ink));
     box-shadow:0 0 12px color-mix(in srgb,var(--accent) 55%,transparent);
+    transform:scaleX(0);transform-origin:left;will-change:transform;
+  }
+  /* Contador de fase (01–04): posición legible dentro de la secuencia */
+  .hscroll-count{display:none}
+  .hscroll--active .hscroll-count{
+    display:block;position:absolute;right:6vw;bottom:calc(7vh + 18px);
+    font-size:.72rem;letter-spacing:.22em;color:var(--muted);
+    font-weight:500;font-variant-numeric:tabular-nums;
+  }
+  .hscroll--active .hscroll-count .cur{color:var(--accent-ink)}
+  /* Coreografía por panel: presencia (--pp, la escribe scroll.js) según la
+     distancia al centro — el panel activo se asienta, los demás esperan.
+     Solo desktop: en móvil los paneles quedan asentados (--pp por defecto = 1). */
+  @media(min-width:761px){
+    .hscroll--active .hpanel{
+      transform:translate3d(0,calc((1 - var(--pp,1)) * 26px),0) scale(calc(.97 + var(--pp,1) * .03));
+      opacity:calc(.35 + var(--pp,1) * .65);
+      transform-origin:center bottom;
+      will-change:transform,opacity;
+    }
+    .hscroll--active .hpanel--intro{transform-origin:left center}
   }
   @media(max-width:760px){
     .hscroll--active .hpanel h3{font-size:clamp(2rem,9vw,3rem)}
@@ -734,6 +784,12 @@
                filter var(--motion-duration) var(--motion-easing);
   }
   .reveal.visible{opacity:1;transform:none;filter:none}
+  /* Firma editorial: los titulares entran con más recorrido y un enderezado
+     sutil (skew→0). --motion-scale=0 lo neutraliza en reduce-motion. */
+  h2.reveal{
+    transform:translateY(calc(48px * var(--motion-scale))) skewY(calc(1.2deg * var(--motion-scale)));
+    transform-origin:left bottom;
+  }
   .ai-grid .reveal:nth-child(2),.services-list .reveal:nth-child(2){transition-delay:.06s}
   .ai-grid .reveal:nth-child(3),.services-list .reveal:nth-child(3){transition-delay:.12s}
   .ai-grid .reveal:nth-child(4),.services-list .reveal:nth-child(4){transition-delay:.18s}
@@ -759,6 +815,12 @@
     }
     @keyframes reveal-in{
       from{opacity:0;transform:translateY(calc(30px * var(--motion-scale)));filter:blur(var(--motion-blur))}
+      to{opacity:1;transform:none;filter:none}
+    }
+    /* Titulares: misma firma editorial (recorrido largo + enderezado) en la capa CSS. */
+    h2.reveal{animation-name:reveal-in-h2}
+    @keyframes reveal-in-h2{
+      from{opacity:0;transform:translateY(calc(48px * var(--motion-scale))) skewY(calc(1.2deg * var(--motion-scale)));filter:blur(var(--motion-blur))}
       to{opacity:1;transform:none;filter:none}
     }
     /* Escalonado: pequeño desfase del rango por columna en rejillas. */
@@ -787,6 +849,21 @@
     @keyframes img-parallax-soft{
       from{transform:translateY(calc(21px * var(--motion-scale)))}
       to{transform:translateY(calc(-21px * var(--motion-scale)))}
+    }
+
+    /* La firma final: el subrayado del email se dibuja al entrar en escena.
+       Con --motion-scale=0 (reduce-motion) nace ya dibujado. */
+    .contact-email{border-bottom:none;display:inline-block}
+    .contact-email::after{
+      content:"";display:block;height:2px;background:var(--accent);
+      border-radius:2px;transform-origin:left;
+      animation:draw-line linear both;
+      animation-timeline:view();
+      animation-range:entry 20% entry 75%;
+    }
+    @keyframes draw-line{
+      from{transform:scaleX(calc(1 - var(--motion-scale)))}
+      to{transform:scaleX(1)}
     }
   }
 
