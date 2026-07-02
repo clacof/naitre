@@ -31,6 +31,7 @@ export const initHero = engine => {
   const track = document.querySelector('.hero-track');
   const stage = document.querySelector('.hero-stage');
   const canvas = document.querySelector('.hero-canvas');
+  const content = document.querySelector('.hero-content');
   const hint = document.querySelector('.hero-scroll-hint');
   if (!header || !track || !stage || !canvas) return;
   const ctx = canvas.getContext('2d');
@@ -39,6 +40,7 @@ export const initHero = engine => {
   header.classList.add('hero--active');
 
   let W = 0, H = 0, dpr = 1, cx = 0, cy = 0, R = 0;
+  let isMobile = false, bandH = 0; // móvil: banda libre sobre el texto
   let particles = [];
   let inkColor = '#181b20', accentColor = '#c96342';
   const pointer = { x: 0, y: 0, active: false };
@@ -107,7 +109,7 @@ export const initHero = engine => {
       ring: t.ring != null ? t.ring : -1, baseA: t.baseA || 0, rr: t.rr || 0,
       arcFrac: t.arcFrac || 0,
       spark: !!t.spark, core: !!t.core, link: !!t.link, ambient: false,
-      sx: Math.random() * W, sy: Math.random() * H,
+      sx: Math.random() * W, sy: Math.random() * bandH,
       delay: Math.random() * 0.34,
       seed: Math.random() * Math.PI * 2,
       depth: 0.6 + Math.random() * 0.8, // variación de tamaño/opacidad
@@ -118,10 +120,31 @@ export const initHero = engine => {
         tx: (Math.random() * 2 - 1) * 1.6, ty: (Math.random() * 2 - 1) * 1.15,
         ring: -1, baseA: 0, rr: 0, arcFrac: 0,
         spark: false, core: false, link: false, ambient: true,
-        sx: Math.random() * W, sy: Math.random() * H,
+        sx: Math.random() * W, sy: Math.random() * bandH,
         delay: Math.random() * 0.5, seed: Math.random() * Math.PI * 2,
         depth: 0.5 + Math.random() * 0.7, ox: 0, oy: 0, vx: 0, vy: 0
       });
+    }
+  };
+
+  /* Geometría del átomo. En móvil se mide la banda libre real entre el borde
+   * superior y el texto (.hero-content, anclado abajo por CSS) y el átomo se
+   * centra y dimensiona dentro de ella: el bloom máximo (~1.35R) nunca toca
+   * el h1. Con R = 0.34·banda, cy = 0.52·banda ⇒ cy + 1.35R ≈ 0.98·banda. */
+  const layout = () => {
+    isMobile = W < 760;
+    if (isMobile) {
+      const contentTop = content ? content.offsetTop : H * 0.62; // offsetTop ignora las transforms de entrada
+      const free = Math.max(150, contentTop - 24);               // 24px de aire sobre el texto
+      cx = W * 0.5;
+      cy = free * 0.52;
+      R = clamp(Math.min(free * 0.34, W * 0.34), 48, 190);
+      bandH = free; // dispersión inicial y polvo ambiental confinados a la banda
+    } else {
+      cx = W * 0.82;  // desktop: sangrado a la derecha
+      cy = H * 0.46;
+      R = Math.max(180, Math.min(Math.min(W, H) * 0.5, 520));
+      bandH = H;
     }
   };
 
@@ -134,14 +157,9 @@ export const initHero = engine => {
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const mobile = W < 760;
-    cx = mobile ? W * 0.5 : W * 0.82;   // móvil: centrado; desktop: sangrado a la derecha
-    cy = mobile ? H * 0.12 : H * 0.46;  // móvil: marca/acento en la zona superior
-    R = mobile
-      ? Math.max(78, Math.min(Math.min(W, H) * 0.20, 170))   // pequeño: lee como marca, no invade el texto
-      : Math.max(180, Math.min(Math.min(W, H) * 0.5, 520));
     readColors();
-    buildParticles(mobile);
+    layout();
+    buildParticles(isMobile);
   };
 
   const pos = []; // posiciones calculadas por frame (reutilizado)
@@ -162,9 +180,13 @@ export const initHero = engine => {
     }
     if (ignition > 0) cometPhase = (cometPhase + dt * COMET_SPEED) % 1;
 
-    // parallax de puntero (inclinación global suavizada)
-    const tgx = pointer.active ? clamp((pointer.x - cx) / R, -1, 1) : 0;
-    const tgy = pointer.active ? clamp((pointer.y - cy) / R, -1, 1) : 0;
+    // parallax de puntero (inclinación global suavizada); en móvil no hay
+    // cursor: deriva autónoma lenta para que la profundidad siga leyéndose
+    const drift = isMobile && !pointer.active ? breathe : 0;
+    const tgx = pointer.active ? clamp((pointer.x - cx) / R, -1, 1)
+                               : Math.sin(time * 0.00023) * 0.6 * drift;
+    const tgy = pointer.active ? clamp((pointer.y - cy) / R, -1, 1)
+                               : Math.cos(time * 0.00017) * 0.5 * drift;
     gpx = lerp(gpx, tgx, 0.06);
     gpy = lerp(gpy, tgy, 0.06);
 
@@ -370,6 +392,12 @@ export const initHero = engine => {
     clearTimeout(rt);
     rt = setTimeout(() => { resize(); requestPaint(); }, 120);
   }, { passive: true });
+
+  // si el texto cambia de altura (idioma, fuentes), solo se recoloca el átomo
+  // — sin reconstruir partículas, que provocaría un re-scatter visible
+  if (content && 'ResizeObserver' in window) {
+    new ResizeObserver(() => { layout(); requestPaint(); }).observe(content);
+  }
 
   resize();
   requestPaint();
