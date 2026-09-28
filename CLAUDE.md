@@ -18,6 +18,9 @@ Stack: HTML · CSS (custom properties) · JavaScript ESM vanilla · sin bundler 
 npx serve .              # servidor estático en puerto 3000
 python3 -m http.server   # alternativa sin deps
 
+# Regenerar la página inglesa (OBLIGATORIO tras tocar index.html o js/i18n.js):
+node tools/build-en.mjs  # genera en/index.html — nunca editar en/ a mano
+
 # Linting (si se instalan deps):
 npm install
 # No hay lint script definido aún — ver sección Recomendaciones
@@ -29,9 +32,17 @@ npm install
 
 ```
 /
-├── index.html          # Única página — solo HTML (~280 líneas)
+├── index.html          # Página principal (ES) — fuente de verdad del HTML
+│                        # Tarjetas de servicios/IA pre-renderizadas (SEO, no tocar los data-card)
 │                        # Enlaza css/styles.css + vendor/naitre/tokens.css
 │                        # Carga un único <script type="module" src="js/main.js">
+├── en/
+│   └── index.html      # Versión EN — GENERADA por tools/build-en.mjs, no editar a mano
+├── tools/
+│   └── build-en.mjs    # Genera en/index.html desde index.html + i18n.en
+├── robots.txt          # Bloquea /api/ + referencia al sitemap
+├── sitemap.xml         # / y /en/ con anotaciones hreflang
+├── favicon.svg / favicon.ico / favicon-96.png / apple-touch-icon.png  # favicons reales (Google no soporta data-URI)
 ├── css/
 │   └── styles.css      # Todo el CSS de la página (extraído del <style> inline)
 ├── js/                 # Código fuente en módulos ESM
@@ -39,7 +50,7 @@ npm install
 │   ├── app.js          # Composición: store + render + chat + cableado de eventos
 │   ├── store.js        # Estado inmutable: createState, transition, createStore
 │   ├── sync.js         # Reconciliación DOM (efectos aislados por slice de estado)
-│   ├── render.js       # Render de tarjetas/servicios desde <template>
+│   ├── render.js       # Hidratación de tarjetas pre-renderizadas (solo interactividad)
 │   ├── chat.js         # createChat(store): UI y flujo del chat (fetch /api/chat)
 │   ├── dom.js          # Helpers DOM ($ , $q, $qa, setAttr, setText, inertTargets)
 │   ├── pure.js         # Helpers puros (svcPrefix, makeChatMsg, chatSubject)

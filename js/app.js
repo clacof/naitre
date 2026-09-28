@@ -8,7 +8,7 @@ import { i18n } from './i18n.js';
 import { $, $q, $qa } from './dom.js';
 import { createStore } from './store.js';
 import { syncAll } from './sync.js';
-import { renderServices, renderAiCards } from './render.js';
+import { hydrateCards } from './render.js';
 import { createChat } from './chat.js';
 
 export const initApp = () => {
@@ -67,8 +67,7 @@ export const initApp = () => {
 
   /* -------- arranque -------- */
   const lang = $q('html').getAttribute('lang') || 'es';
-  renderServices(lang, dispatch);
-  renderAiCards(lang, dispatch);
+  hydrateCards(dispatch);
   dispatch({ type: 'SET_LANG', lang });
 
   /* idioma */

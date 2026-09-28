@@ -22,6 +22,12 @@ export const syncLang = state => {
   const md = $q('meta[name="description"]');
   if (md) md.setAttribute('content', t.doc_desc);
 
+  /* URL canónica por idioma: / (es) ↔ /en/ — sin recargar la página */
+  const path = state.lang === 'en' ? '/en/' : '/';
+  if (location.pathname !== path) {
+    try { history.replaceState(null, '', path + location.hash); } catch (e) { /* file:// */ }
+  }
+
   const be = $('btn-es'), bn = $('btn-en');
   be.classList.toggle('active', state.lang === 'es');
   be.setAttribute('aria-pressed', String(state.lang === 'es'));
