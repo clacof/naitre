@@ -1,5 +1,9 @@
 export const i18n = {
   es: {
+    w7_tag:"Visión por computador · 3D",
+    w7_d:"Código fuente como paneles 3D flotantes que se agarran, giran y lanzan con las manos frente a la cámara: nueve gestos, físicas reales y comandos de voz.",
+    w8_tag:"Visión por computador · 3D",
+    w8_d:"El universo conocido en un solo zoom continuo, de la Tierra al fondo cósmico de microondas, guiado con gestos de las manos y efemérides reales de la NASA.",
     nav_work:"Proyectos",
     work_label:"Proyectos",
     work_title:"Ideas que ya nacieron",
@@ -94,6 +98,10 @@ export const i18n = {
     ai6_long:"<p>Una hoja de ruta pragmática: identificamos los casos de uso con mayor retorno y los validamos con pilotos rápidos, sin humo.</p><ul><li>Auditoría de procesos y datos</li><li>Priorización por impacto y esfuerzo</li><li>Pilotos funcionando en semanas</li><li>Formación de tu equipo</li></ul>"
   },
   en: {
+    w7_tag:"Computer vision · 3D",
+    w7_d:"Source code as floating 3D panels you grab, rotate and throw with your hands in front of the camera: nine gestures, real physics and voice commands.",
+    w8_tag:"Computer vision · 3D",
+    w8_d:"The known universe in one continuous zoom, from Earth to the cosmic microwave background, driven by hand gestures and real NASA ephemerides.",
     nav_work:"Work",
     work_label:"Work",
     work_title:"Ideas already born",
